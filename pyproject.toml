@@ -1,0 +1,18 @@
+[project]
+name = "tcc-luis-felipe"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "colorama==0.4.6",
+    "comtypes==1.4.8",
+    "networkx==3.5",
+    "numpy==2.2.0",
+    "pandas==2.2.3",
+    "py-dss-interface==2.0.4",
+    "python-dateutil==2.9.0.post0",
+    "pytz==2024.2",
+    "six==1.17.0",
+    "tzdata==2024.2",
+]
