@@ -24,11 +24,12 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
+          # 'paths' é a chave correta para o mkdocstrings-python
+          paths: ["."] 
           options:
             show_source: true
             show_root_heading: true
-          # O segredo está aqui: apontar para a pasta src
-          import_dirs: ["src"] 
+            annotations_path: brief
   - mkdocs-jupyter
 
 markdown_extensions:
