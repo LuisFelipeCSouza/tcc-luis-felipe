@@ -26,9 +26,9 @@ plugins:
         python:
           options:
             show_source: true
-          # Isso garante que o Python encontre seus scripts na raiz
-          setup_python_path: true 
-          import_dirs: ["."] 
+            show_root_heading: true
+          # O segredo está aqui: apontar para a pasta src
+          import_dirs: ["src"] 
   - mkdocs-jupyter
 
 markdown_extensions:
