@@ -17,3 +17,11 @@ dependencies = [
     "tqdm>=4.67.1",
     "tzdata==2024.2",
 ]
+
+[dependency-groups]
+dev = [
+    "mkdocs-jupyter>=0.25.1",
+    "mkdocs-literate-nav>=0.6.2",
+    "mkdocs-material>=9.7.5",
+    "mkdocstrings[python]>=1.0.3",
+]
