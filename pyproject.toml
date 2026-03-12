@@ -14,5 +14,6 @@ dependencies = [
     "python-dateutil==2.9.0.post0",
     "pytz==2024.2",
     "six==1.17.0",
+    "tqdm>=4.67.1",
     "tzdata==2024.2",
 ]
