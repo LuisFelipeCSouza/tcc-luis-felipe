@@ -3,7 +3,11 @@ name: Deploy Documentation
 on:
   push:
     branches:
-      - main  # Ou 'master', dependendo da sua branch principal
+      - main
+
+# ADICIONE ESTE BLOCO AQUI:
+permissions:
+  contents: write
 
 jobs:
   deploy:
@@ -15,7 +19,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
-          enable-cache: true # Acelera os deploys futuros
+          enable-cache: true
 
       - name: Set up Python
         run: uv python install 3.11
@@ -24,5 +28,4 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Build and Deploy
-        # O comando gh-deploy do mkdocs já cuida de criar a branch 'gh-pages'
         run: uv run mkdocs gh-deploy --force
