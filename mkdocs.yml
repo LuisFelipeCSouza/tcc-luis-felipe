@@ -40,6 +40,12 @@ markdown_extensions:
       anchor_linenums: true
   - admonition
 
+# Esta parte é ESSENCIAL para carregar o motor de matemática (MathJax)
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.id?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
 nav:
   - Início: index.md
   - Tutorial:
