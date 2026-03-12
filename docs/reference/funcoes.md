@@ -2,4 +2,4 @@
 
 Documentação das funções de suporte para cálculo de impedância e manipulação de grafos.
 
-::: funcoes
+::: src.funcoes
