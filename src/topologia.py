@@ -71,7 +71,7 @@ class FeederTopology:
                 'num_phases': num_phases,
                 'bus1': bus1,
                 'bus2': bus2,
-                'phases': phases[::-1] # Ordem para compatibilidade com matrizes
+                'phases': phases
             }
             self.dss.lines.next()
         return data
