@@ -14,13 +14,13 @@ class FaultSimulator:
 
     """Classe responsável por orquestrar a simulação de curtos-circuitos no OpenDSS."""
 
-    def __init__(self, path_file, origin_bus='sourcebus'):
+    def __init__(self, path_file, origin_bus='sourcebus', base_kv=12.66):
 
         self.path_file = path_file
         self.dss = py_dss_interface.DSS()
         self.dss.text('Clear')
         self.dss.text(f'Compile "{self.path_file}"')
-        # Resolve o fluxo base para habilitar a medição de distânciasdo OpenDSS
+        # Resolve o fluxo base para habilitar a medição de distâncias do OpenDSS
         self.dss.solution.solve()  
 
         # Inicializa a topologia e extrai os dados estáticos das linhas
@@ -203,6 +203,26 @@ class FaultSimulator:
         "ac": {"phases_needed": ['1', '3'], "bus1": ".1", "bus2": ".3", "num_phases": "1"},
         "abc": {"phases_needed": ['1', '2', '3'], "bus1": ".1.2.3", "bus2": ".0", "num_phases": "3"},
     }
+
+    def _initialize_results_dict(self):
+        """Cria a estrutura do dicionário para armazenar as medições."""
+
+        meas_dict = {f'{i}{j}_{k}': [] for i in ['v', 'i'] for j in ['a', 'b', 'c'] for k in ['r', 'i']}
+        meas_dict.update({col: [] for col in ['linha_faltosa', 'distancia', 'tipo', 'r']})
+                         
+        # Cria as colunas dinamicamente para cada fase de cada sensor encontrado
+        for sensor in self.topology.get_all_sensors():
+            for fase in ['a', 'b', 'c']:
+                meas_dict[f'{sensor}_i{fase}'] = []
+            
+        return meas_dict
+
+    def _take_measurements(self, line: str, dist_accum: float, faul_type, str, r_fault):
+        """Coleta as tensões e correntes após a solução da falta"""
+        self.dss.circuit.set_active_element(f"Line.{line}")
+
+
+        pass
     
 if __name__ == "__main__":
     BASE_DIR = Path(__file__).parent.parent
@@ -225,6 +245,7 @@ if __name__ == "__main__":
     
     # Lista de resistências de falta (em Ohms)
     resistencias_falta = [0.0001, 10.0, 20.0, 30.0, 40.0]  
+    resistencias_falta = [0.0001, 10.0]  
 
     # 5. Executa o laço principal da simulação
     print("\n🚀 Iniciando a varredura linear de curtos-circuitos...")
