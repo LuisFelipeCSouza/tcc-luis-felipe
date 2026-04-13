@@ -1,16 +1,20 @@
 import py_dss_interface
 import networkx as nx
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 class FeederTopology:
     """Classe para descoberta automática de topologia radial no OpenDSS."""
     
-    def __init__(self, dss: py_dss_interface.DSS):
+    def __init__(self, dss: py_dss_interface.DSS, source_bus: str):
         self.dss = dss
+        self.source_bus = source_bus.lower()
         self.graph = nx.DiGraph()
+
         self._build_full_topology()
         self.line_data = self._extract_line_parameters()
         self.main_circuits = self._discover_line_circuits()
+
+        self._map_sensors()
 
     def _build_full_topology(self):
         """
@@ -81,12 +85,19 @@ class FeederTopology:
         Identifica caminhos da raiz até as extremidades (leaf nodes).
         Filtra os caminhos para retornar apenas os nomes das Linhas.
         """
-        # Localiza a raiz (nó com grau de entrada zero - geralmente a saída da SE)
-        roots = [n for n, d in self.graph.in_degree() if d == 0]
-        if not roots:
-            return {}
+        # Verifica se a barra de origm informada existe no grafo
+        if self.source_bus in self.graph.nodes:
+            root = self.source_bus
+        else:
+            # Fallback: Localiza a raiz dinamicamente (nó com grau de entrada zero)
+            roots = [n for n, d in self.graph.in_degree() if d == 0]
+            if not roots:
+                print(f"⚠️ Aviso: Barra de origem '{self.source_bus}' não encontrada e não há nós com grau de entrada zero.")
+                return {}
         
-        root = roots[0]
+            root = roots[0]
+            print(f"⚠️ Aviso: Barra '{self.source_bus}' não encontrada no grafo. Assumindo a barra '{root}' como raiz do alimentador.")
+
         # Localiza os nós terminais (nós com grau de saída zero)
         leaves = [n for n, d in self.graph.out_degree() if d == 0]
         
@@ -113,6 +124,87 @@ class FeederTopology:
                 continue
                 
         return circuits
+    
+    def _map_sensors(self):
+        """
+        Mapeia os sensores da rede usando busca em largura (BFS).
+        Garante que um sensor seja sempre uma linha, ignorando transformadores
+        no início do alimentador ou nas derivações até encontrar a primeira seção de cabo.
+        """
+        self.sensor_map = {}  # Mapeia {nome_da_linha: nome_do_sensor}
+        self.sensors = []     # Lista contendo os sensores únicos
+
+        # Determina a raiz da busca
+        if self.source_bus in self.graph.nodes:
+            root = self.source_bus
+        else:
+            roots = [n for n, d in self.graph.in_degree() if d == 0]
+            if not roots:
+                return
+            root = roots[0]
+
+        # Fila armazena: (nó_atual, sensor_ativo_no_ramal, precisa_de_novo_sensor)
+        # Iniciamos a raiz avisando que o circuito precisa de um sensor inicial.
+        queue = [(root, None, True)]
+        
+        while queue:
+            u, passed_sensor, passed_needs_sensor = queue.pop(0)
+            
+            # Verifica se o nó atual é uma derivação ou a raiz do alimentador
+            is_fork_or_root = (u == root) or (self.graph.out_degree(u) > 1)
+            
+            for v in self.graph.successors(u):
+                edge_data = self.graph.get_edge_data(u, v)
+                edge_label = edge_data['label']
+                edge_type = edge_data['type']
+                
+                # Se for raiz ou derivação, forçamos o ramal a buscar um novo sensor.
+                # Caso contrário, mantemos o status de busca que veio do nó anterior.
+                branch_needs_sensor = is_fork_or_root or passed_needs_sensor
+                
+                if branch_needs_sensor:
+                    if edge_type == 'line':
+                        # Encontramos a primeira LINHA deste ramal! Ela é o sensor.
+                        active_sensor = edge_label
+                        next_needs_sensor = False
+                        if active_sensor not in self.sensors:
+                            self.sensors.append(active_sensor)
+                    else:
+                        # É um transformador iniciando o ramal. Ainda precisamos de um sensor.
+                        # Herdamos temporariamente o sensor anterior (caso exista) até achar a linha.
+                        active_sensor = passed_sensor
+                        next_needs_sensor = True
+                else:
+                    # O ramal já encontrou seu sensor lá atrás. Apenas repassa a informação.
+                    active_sensor = passed_sensor
+                    next_needs_sensor = False
+                
+                # Apenas mapeamos as linhas no sensor_map (ignoramos transformadores)
+                if edge_type == 'line' and active_sensor is not None:
+                    self.sensor_map[edge_label] = active_sensor
+                
+                # Repassa o estado para o próximo nó
+                queue.append((v, active_sensor, next_needs_sensor))
+
+    def get_all_sensors(self) -> List[str]:
+        """
+        Substitui a antiga 'lista_sensores_fc'.
+        Retorna a lista com os nomes (labels) únicos de todos os sensores do alimentador.
+        """
+        return self.sensors
+
+    def get_sensor_for_line(self, line_label: str) -> Optional[str]:
+        """
+        Substitui a antiga 'get_sensor_locations'.
+        Retorna o nome do sensor que monitora uma seção de linha específica de forma instantânea.
+        
+        Args:
+            line_label (str): Nome da linha consultada.
+            
+        Returns:
+            str: O nome da linha que atua como sensor, ou None se a linha não existir.
+        """
+        return self.sensor_map.get(line_label.lower())
 
     def print_circuits_info(self):
         """
@@ -148,3 +240,11 @@ class FeederTopology:
             print(f"C_{idx}: L = {comprimento_total:.2f} | Q = {quantidade} | seçoes: [{secoes_str}]")
             
         print("\n" + "="*60 + "\n")
+
+if __name__ == "__main__":
+    # Exemplo de uso
+    dss = py_dss_interface.DSS()
+    dss.text("compile path_to_your_circuit.dss")
+    
+    topologia = FeederTopology(dss, source_bus='sourcebus')
+    topologia.print_circuits_info()
