@@ -24,10 +24,17 @@ class FeederTopology:
         # 1. Mapear Linhas
         self.dss.lines.first()
         for _ in range(self.dss.lines.count):
+
             name = self.dss.lines.name.lower()
+
+            if self.dss.text(f"? Line.{name}.switch").strip().lower() == 'true':
+                line_type = 'switch'
+            else:
+                line_type = 'line'
+
             b1 = self.dss.lines.bus1.split('.')[0].lower()
             b2 = self.dss.lines.bus2.split('.')[0].lower()
-            self.graph.add_edge(b1, b2, label=name, type='line')
+            self.graph.add_edge(b1, b2, label=name, type=line_type)
             self.dss.lines.next()
 
         # 2. Mapear Transformadores (incluindo reguladores monofásicos)
