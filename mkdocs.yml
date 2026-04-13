@@ -55,6 +55,7 @@ nav:
       - "Personalizando Resistências de Falta": how-to/ajuste-parametros.md
   - Referência da API:
       - "Módulo de Funções (funcoes.py)": reference/funcoes.md
+      - "Topologia da Rede (topologia.py)": reference/topologia.md
       - "Automação (automacao.py)": reference/automacao.md
       - "Mínima Reatância (minima_reatancia.py)": reference/minima_reatancia.md
   - Teoria e Conceitos:
