@@ -42,6 +42,10 @@ class FaultSimulator:
         
         self.fault_configs = self._get_fault_configs()
 
+        self.feeder_head = self.topology.find_feeder_head()
+
+        self.results = self._initialize_results_dict()
+
     def run_simulation(self,
                        r_list: List[float],
                        step_pct: float = None,
@@ -112,8 +116,7 @@ class FaultSimulator:
 
                             dist_fault = dist_bus1 + delta_dist
                             
-                            # Aqui você adicionará sua lógica para extrair as correntes/tensões
-                            # self._take_measurements(...)
+                            self._take_measurements(line, dist_fault, fault_type, r_fault)
 
     def apply_fault(self, m: float, line: str, r: float, fault_type: str) -> bool:
         """Divide a linha e aplica a falta na distância m (%). Retorna False se a falta for inválida."""
@@ -217,13 +220,77 @@ class FaultSimulator:
             
         return meas_dict
 
-    def _take_measurements(self, line: str, dist_accum: float, faul_type, str, r_fault):
-        """Coleta as tensões e correntes após a solução da falta"""
-        self.dss.circuit.set_active_element(f"Line.{line}")
+    def _take_measurements(self, line: str, dist_accum: float, fault_type: str, r_fault: float):
+        """Coleta as tensões/correntes na saída do alimentador e as correntes dos sensores."""
 
+        map_fase = {'1': 'a', '2': 'b', '3': 'c'}
 
-        pass
-    
+        # ==========================================
+        # 1. MEDIÇÕES NA SAÍDA DO ALIMENTADOR
+        # ==========================================
+        self.dss.circuit.set_active_element(f"Line.{self.feeder_head}")
+        feeder_phases = self.topology.line_data[self.feeder_head]['phases']
+        
+        voltages = self.dss.cktelement.voltages
+        currents = self.dss.cktelement.currents
+
+        # Dicionários temporários zerados para as fases (garante 0.0 caso não exista a fase na linha)
+        v_dict = {'a': (0.0, 0.0), 'b': (0.0, 0.0), 'c': (0.0, 0.0)}
+        i_dict = {'a': (0.0, 0.0), 'b': (0.0, 0.0), 'c': (0.0, 0.0)}
+
+        # O OpenDSS retorna 2 valores (real, imag) para cada fase de cada terminal.
+        # Os primeiros len(feeder_phases)*2 valores correspondem ao Terminal 1.
+        for idx, num_fase in enumerate(feeder_phases):
+            letra_fase = map_fase[num_fase]
+            v_dict[letra_fase] = (voltages[2*idx], voltages[2*idx + 1])
+            i_dict[letra_fase] = (currents[2*idx], currents[2*idx + 1])
+
+        # Armazena as tensões (real e imaginário)
+        for letra in ['a', 'b', 'c']:
+            self.results[f'v{letra}_r'].append(v_dict[letra][0])
+            self.results[f'v{letra}_i'].append(v_dict[letra][1])
+            self.results[f'i{letra}_r'].append(i_dict[letra][0])
+            self.results[f'i{letra}_i'].append(i_dict[letra][1])
+
+        # ==========================================
+        # 2. METADADOS DA FALTA
+        # ==========================================
+        self.results['linha_faltosa'].append(line)
+        self.results['distancia'].append(dist_accum) # Já assumimos que está em metros
+        self.results['tipo'].append(fault_type)
+        self.results['r_f'].append(r_fault)
+
+        # ==========================================
+        # 3. CORRENTES DOS SENSORES (MAGNITUDE)
+        # ==========================================
+        for sensor in self.topology.get_all_sensors():
+            self.dss.circuit.set_active_element(f"Line.{sensor}")
+            sensor_currents = self.dss.cktelement.currents
+            sensor_phases = self.topology.line_data[sensor]['phases']
+            
+            i_mag = {'a': 0.0, 'b': 0.0, 'c': 0.0}
+            
+            # Coleta apenas a corrente do terminal 1 convertendo para absoluto (magnitude)
+            for idx, num_fase in enumerate(sensor_phases):
+                letra_fase = map_fase[num_fase]
+                real, imag = sensor_currents[2*idx], sensor_currents[2*idx + 1]
+                i_mag[letra_fase] = abs(complex(real, imag))
+                
+            self.results[f'{sensor}_ia'].append(i_mag['a'])
+            self.results[f'{sensor}_ib'].append(i_mag['b'])
+            self.results[f'{sensor}_ic'].append(i_mag['c'])
+
+    def export_results(self, output_dir: str = "results", filename: str = "fault_results.csv"):
+        """Salva os resultados consolidados."""
+
+        Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+        df = pd.DataFrame(self.results)
+
+        filepath = Path(output_dir) / filename
+        df.to_csv(filepath, index=False)
+        print(f"Resultados exportados para: {filepath}")
+
 if __name__ == "__main__":
     BASE_DIR = Path(__file__).parent.parent
     dss_file = BASE_DIR / "data" / "34Bus" / "Run_IEEE34Mod1.dss"
@@ -256,5 +323,3 @@ if __name__ == "__main__":
     # simulador.export_results(output_dir="result", filename="resultados_poo.csv")
     
     print("\n✅ Automação concluída com sucesso!")
-
-    
