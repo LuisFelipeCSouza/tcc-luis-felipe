@@ -5,10 +5,11 @@ from typing import List, Dict, Optional
 class FeederTopology:
     """Classe para descoberta automática de topologia radial no OpenDSS."""
     
-    def __init__(self, dss: py_dss_interface.DSS, source_bus: str):
+    def __init__(self, dss: py_dss_interface.DSS, source_bus: str, base_kv: float = 12.66):
         self.dss = dss
         self.source_bus = source_bus.lower()
         self.graph = nx.DiGraph()
+        self.base_kv = base_kv
 
         self._build_full_topology()
         self.line_data = self._extract_line_parameters()
@@ -212,6 +213,32 @@ class FeederTopology:
             str: O nome da linha que atua como sensor, ou None se a linha não existir.
         """
         return self.sensor_map.get(line_label.lower())
+    
+    def find_feeder_head(self) -> str:
+        """
+        Busca a partir da raiz (source_bus) a primeiras arestsa que seja do tipo 'line.
+        Isso ignora transformadores, reguladores ou chaves do início do circuito.
+        """
+
+        queue = [self.source_bus]
+        visited = set()
+
+        while queue:
+            curr = queue.pop(0)
+            visited.add(curr)
+
+            # Navega pelos sucessores no grafo
+            for succ in self.graph.successors(curr):
+                edge_data = self.graph.get_edge_data(curr, succ)
+
+                # Se encontrar a primeira linha, retorna o label dela
+                if edge_data['type'] == 'line':
+                    return edge_data['label']
+
+                if succ not in visited:
+                    queue.append(succ)
+
+        raise ValueError(f"Não foi possível encontrar uma linha a partir da raiz: {self.source_bus}")
 
     def print_circuits_info(self):
         """
@@ -250,8 +277,14 @@ class FeederTopology:
 
 if __name__ == "__main__":
     # Exemplo de uso
+    from pathlib import Path
+
+    BASE_DIR = Path(__file__).parent.parent
+    dss_file = BASE_DIR / "data" / "34Bus" / "Run_IEEE34Mod1.dss"
+
     dss = py_dss_interface.DSS()
-    dss.text("compile path_to_your_circuit.dss")
+    dss.text(f"compile '{dss_file}'")
     
     topologia = FeederTopology(dss, source_bus='sourcebus')
+    print(topologia.find_feeder_head())
     topologia.print_circuits_info()
