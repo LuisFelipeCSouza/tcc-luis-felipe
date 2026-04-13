@@ -1,0 +1,62 @@
+site_name: "Simulador de Faltas - Luis Felipe"
+site_description: "Análise e Localização de Curto-Circuito em Redes de Distribuição"
+site_author: "Luis Felipe Carneiro de Souza"
+site_url: https://LuisFelipeCSouza.github.io/tcc-luis-felipe/
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: indigo
+    - scheme: slate # Modo escuro automático
+      primary: blue grey
+      accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          # 'paths' é a chave correta para o mkdocstrings-python
+          paths: ["."] 
+          options:
+            show_source: true
+            show_root_heading: true
+            annotations_path: brief
+  - mkdocs-jupyter
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - admonition
+
+# Esta parte é ESSENCIAL para carregar o motor de matemática (MathJax)
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.id?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Início: index.md
+  - Tutorial:
+      - "Executando sua primeira simulação": tutorials/primeira-simulacao.md
+  - Guias de Uso:
+      - "Configurando o modelo 34 Barras": how-to/configurar-34-bus.md
+      - "Personalizando Resistências de Falta": how-to/ajuste-parametros.md
+  - Referência da API:
+      - "Módulo de Funções (funcoes.py)": reference/funcoes.md
+      - "Automação (automacao.py)": reference/automacao.md
+      - "Mínima Reatância (minima_reatancia.py)": reference/minima_reatancia.md
+  - Teoria e Conceitos:
+      - "Método da Mínima Reatância": explanation/teoria-reatancia.md
+      - "Integração com Smart Meters": explanation/smart-meters.md
