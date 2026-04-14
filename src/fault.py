@@ -14,7 +14,7 @@ class FaultSimulator:
 
     """Classe responsável por orquestrar a simulação de curtos-circuitos no OpenDSS."""
 
-    def __init__(self, path_file, origin_bus='sourcebus', base_kv=12.66):
+    def __init__(self, path_file, origin_bus='sourcebus', target_kv: float = 13.8):
 
         self.path_file = path_file
         self.dss = py_dss_interface.DSS()
@@ -24,7 +24,8 @@ class FaultSimulator:
         self.dss.solution.solve()  
 
         # Inicializa a topologia e extrai os dados estáticos das linhas
-        self.topology = FeederTopology(self.dss, source_bus=origin_bus)
+        self.target_kv = target_kv
+        self.topology = FeederTopology(self.dss, source_bus=origin_bus, target_kv=self.target_kv)
         self.lines = list(self.topology.line_data.keys())
 
         # Pega o codigo da unidade de comprimento das linhas do circuito base
@@ -33,7 +34,7 @@ class FaultSimulator:
 
         # 4. Cria o dicionário mapeando {nome_da_barra: distancia_em_km}
         self.buses_distance = {
-            str(name).split('.')[0].lower(): float(UnitConverter.to_km(distance, self.units))
+            str(name).split('.')[0].lower(): distance
             for name, distance in zip(self.dss.circuit.buses_names, self.dss.circuit.buses_distances)
         }
         
@@ -114,7 +115,7 @@ class FaultSimulator:
                             
                             delta_dist = UnitConverter.to_km(line_data['length'], self.units) * m
 
-                            dist_fault = dist_bus1 + delta_dist
+                            dist_fault = (dist_bus1 + delta_dist) * 1_000.0 # Converte para metros
                             
                             self._take_measurements(line, dist_fault, fault_type, r_fault)
 
@@ -258,7 +259,7 @@ class FaultSimulator:
         self.results['linha_faltosa'].append(line)
         self.results['distancia'].append(dist_accum) # Já assumimos que está em metros
         self.results['tipo'].append(fault_type)
-        self.results['r_f'].append(r_fault)
+        self.results['r'].append(r_fault)
 
         # ==========================================
         # 3. CORRENTES DOS SENSORES (MAGNITUDE)
