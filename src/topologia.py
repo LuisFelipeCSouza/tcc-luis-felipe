@@ -1,21 +1,29 @@
 import py_dss_interface
 import networkx as nx
+import numpy as np
 from typing import List, Dict, Optional
 
 class FeederTopology:
     """Classe para descoberta automática de topologia radial no OpenDSS."""
     
-    def __init__(self, dss: py_dss_interface.DSS, source_bus: str, base_kv: float = 12.66):
+    def __init__(self, dss: py_dss_interface.DSS, source_bus: str, target_kv: float = 12.66, tolerance: float = 0.1):
         self.dss = dss
         self.source_bus = source_bus.lower()
+        self.target_kv = target_kv
+        self.tolerance = tolerance
         self.graph = nx.DiGraph()
-        self.base_kv = base_kv
+
 
         self._build_full_topology()
         self.line_data = self._extract_line_parameters()
         self.main_circuits = self._discover_line_circuits()
-
         self._map_sensors()
+
+    def _is_target_voltage(self, bus_name: str) -> bool:
+        """Verifica se um barramento está dentro da faixa de tensão alvo."""
+        self.dss.circuit.set_active_bus(bus_name)
+        kv_base = self.dss.bus.kv_base
+        return abs(kv_base - self.target_kv) <= self.tolerance
 
     def _build_full_topology(self):
         """
@@ -27,15 +35,17 @@ class FeederTopology:
         for _ in range(self.dss.lines.count):
 
             name = self.dss.lines.name.lower()
-
-            if self.dss.text(f"? Line.{name}.switch").strip().lower() == 'true':
-                line_type = 'switch'
-            else:
-                line_type = 'line'
-
             b1 = self.dss.lines.bus1.split('.')[0].lower()
             b2 = self.dss.lines.bus2.split('.')[0].lower()
-            self.graph.add_edge(b1, b2, label=name, type=line_type)
+
+            if self._is_target_voltage(b1) and self._is_target_voltage(b2):
+                if self.dss.text(f"? Line.{name}.switch").strip().lower() == 'true':
+                    line_type = 'switch'
+                else:
+                    line_type = 'line'
+
+                self.graph.add_edge(b1, b2, label=name, type=line_type)
+            
             self.dss.lines.next()
 
         # 2. Mapear Transformadores (incluindo reguladores monofásicos)
@@ -51,13 +61,14 @@ class FeederTopology:
             
             # Se a aresta já existe (ex: banco de transformadores reg1a, reg1b, reg1c),
             # o nx.DiGraph apenas mantém uma única conexão.
-            if not self.graph.has_edge(b1, b2):
-                self.graph.add_edge(b1, b2, label=name, type='transformer')
-            else:
-                # Opcional: Se quiser saber que é um banco, pode concatenar os nomes
-                existing_label = self.graph[b1][b2]['label']
-                if name not in existing_label:
-                    self.graph[b1][b2]['label'] = f"{existing_label}/{name}"
+            if self._is_target_voltage(b1) and self._is_target_voltage(b2):
+                if not self.graph.has_edge(b1, b2):
+                    self.graph.add_edge(b1, b2, label=name, type='transformer')
+                else:
+                    # Opcional: Se quiser saber que é um banco, pode concatenar os nomes
+                    existing_label = self.graph[b1][b2]['label']
+                    if name not in existing_label:
+                        self.graph[b1][b2]['label'] = f"{existing_label}/{name}"
             
             self.dss.transformers.next()
 
@@ -70,21 +81,42 @@ class FeederTopology:
             bus1_full = self.dss.lines.bus1
             bus1 = bus1_full.split('.')[0].lower()
             bus2 = self.dss.lines.bus2.split('.')[0].lower()
-            num_phases = self.dss.lines.phases
-            
-            # Identifica as fases (ex: .1.2.3 -> ['1', '2', '3'])
-            phases = bus1_full.split('.')[1:]
-            if not phases: 
-                phases = ['1', '2', '3'][:num_phases]
-                
-            data[name] = {
-                'linecode': self.dss.lines.linecode,
-                'length': self.dss.lines.length,
-                'num_phases': num_phases,
-                'bus1': bus1,
-                'bus2': bus2,
-                'phases': phases
-            }
+
+            if self._is_target_voltage(bus1) and self._is_target_voltage(bus2):
+                is_switch = self.dss.text(f"? Line.{name}.switch").strip().lower() == 'true'
+
+                if not is_switch:
+
+                    num_phases = self.dss.lines.phases
+                    # Identifica as fases (ex: .1.2.3 -> ['1', '2', '3'])
+                    phases = bus1_full.split('.')[1:]
+                    if not phases: 
+                        phases = ['1', '2', '3'][:num_phases]
+                        
+                    rmatrix = np.array(self.dss.lines.rmatrix).reshape((num_phases, num_phases))
+                    xmatrix = np.array(self.dss.lines.xmatrix).reshape((num_phases, num_phases))
+                    z_base = rmatrix + 1j * xmatrix
+
+                    z_3x3 = np.zeros((3,3), dtype=complex)
+                    phase_map = {'1': 0, '2': 1, '3': 2}
+
+                    for i, ph_i in enumerate(phases):
+                        if ph_i in phase_map:
+                            idx_i = phase_map[ph_i]
+                            for j, ph_j in enumerate(phases):
+                                if ph_j in phase_map:
+                                    idx_j = phase_map[ph_j]
+                                    z_3x3[idx_i, idx_j] = z_base[i, j]
+
+                    data[name] = {
+                        'linecode': self.dss.lines.linecode,
+                        'length': self.dss.lines.length,
+                        'num_phases': num_phases,
+                        'bus1': bus1,
+                        'bus2': bus2,
+                        'phases': phases,
+                        'zmatrix': z_3x3
+                    }
             self.dss.lines.next()
         return data
 
@@ -100,11 +132,11 @@ class FeederTopology:
             # Fallback: Localiza a raiz dinamicamente (nó com grau de entrada zero)
             roots = [n for n, d in self.graph.in_degree() if d == 0]
             if not roots:
-                print(f"⚠️ Aviso: Barra de origem '{self.source_bus}' não encontrada e não há nós com grau de entrada zero.")
+                print(f"Aviso: Barra de origem '{self.source_bus}' não encontrada e não há nós com grau de entrada zero.")
                 return {}
         
             root = roots[0]
-            print(f"⚠️ Aviso: Barra '{self.source_bus}' não encontrada no grafo. Assumindo a barra '{root}' como raiz do alimentador.")
+            print(f"Aviso: Barra '{self.source_bus}' não encontrada no grafo. Assumindo a barra '{root}' como raiz do alimentador.")
 
         # Localiza os nós terminais (nós com grau de saída zero)
         leaves = [n for n, d in self.graph.out_degree() if d == 0]
