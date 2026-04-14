@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "colorama==0.4.6",
     "comtypes==1.4.8",
+    "matplotlib>=3.10.8",
     "networkx==3.5",
     "numpy==2.2.0",
     "pandas==2.2.3",
@@ -25,3 +26,10 @@ dev = [
     "mkdocs-material>=9.7.5",
     "mkdocstrings[python]>=1.0.3",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
