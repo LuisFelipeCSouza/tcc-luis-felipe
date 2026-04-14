@@ -1,2 +1,3 @@
 # Automação OpenDSS
+
 ::: src.locator
