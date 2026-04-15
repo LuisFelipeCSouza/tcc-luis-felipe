@@ -272,6 +272,24 @@ class FeederTopology:
 
         raise ValueError(f"Não foi possível encontrar uma linha a partir da raiz: {self.source_bus}")
 
+    def get_main_branch(self) -> List[str]:
+        """
+        Identifica e retorna a lista de seções de linha que compõem 
+        o ramal principal (caminho mais longo em termos de distância).
+        """
+        if not self.main_circuits:
+            return []
+
+        # Calcula o comprimento total para cada circuito mapeado
+        comprimentos = {}
+        for nome, linhas in self.main_circuits.items():
+            total_l = sum(self.line_data[l]['length'] for l in linhas)
+            comprimentos[nome] = total_l
+
+        # Retorna a lista de linhas do circuito com maior comprimento
+        nome_principal = max(comprimentos, key=comprimentos.get)
+        return self.main_circuits[nome_principal]
+
     def print_circuits_info(self):
         """
         Imprime no terminal os circuitos mapeados em ordem crescente de tamanho,
