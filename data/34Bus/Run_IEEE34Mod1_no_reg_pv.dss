@@ -10,6 +10,8 @@ New Energymeter.M1  Line.L1  1
 
 Batchedit RegControl..* maxtapchange=0
 
+Redirect Pvsystem.dss
+
 !solve
 !Buscoords IEEE34_BusXY.csv
 
