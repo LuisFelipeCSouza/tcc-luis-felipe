@@ -1,0 +1,14 @@
+colorama==0.4.6
+comtypes==1.4.8
+matplotlib>=3.10.8
+networkx==3.5
+numpy==2.2.0
+pandas==2.2.3
+py-dss-interface==2.0.4
+python-dateutil==2.9.0.post0
+pytz==2024.2
+scikit-learn>=1.8.0
+seaborn>=0.13.2
+six==1.17.0
+tqdm>=4.67.1
+tzdata==2024.2

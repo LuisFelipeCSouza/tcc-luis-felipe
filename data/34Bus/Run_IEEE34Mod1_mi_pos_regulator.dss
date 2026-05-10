@@ -4,7 +4,7 @@
 
 ! change the path name to match where it is actually installed on your computer
 
-Compile ieee34Mod1.dss
+Compile ieee34Mod1_mi_pos_regulator.dss
 
 New Energymeter.M1  Line.L1  1
 

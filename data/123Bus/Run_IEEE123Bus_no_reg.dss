@@ -1,0 +1,28 @@
+! Annotated "Run" file for the IEEE 123 Bus Test Case
+!
+
+! This file contains two DSS scripts for executing the IEEE 123-bus test case.
+
+! The first script lets the DSS compute the regulator taps, which are generally one off from the 
+! presently posted solution. The second script uses the tap values determined by Kersting. This is done by
+! setting the taps on the transformers representing the regulators and then inhibiting the regulator control
+
+! The circuit definition is controlled by a "master" file, which invokes other files. This is but one 
+! logical way to oganize your files. You are free to choose another scheme of your choosing.
+
+! =================================================================
+! 1st Script
+! =================================================================
+
+
+Compile (IEEE123Master_no_reg.dss)
+
+Set MaxControlIter=30
+
+! Solve executes the solution for the present solution mode, which is "snapshot".
+
+New EnergyMeter.Feeder Line.L115 1
+
+solve
+Buscoords BusCoords.dat   ! load in bus coordinates
+

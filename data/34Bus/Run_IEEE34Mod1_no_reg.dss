@@ -4,11 +4,11 @@
 
 ! change the path name to match where it is actually installed on your computer
 
-Compile ieee34Mod1.dss
+Compile ieee34Mod1_no_reg.dss
 
 New Energymeter.M1  Line.L1  1
 
-! Batchedit RegControl..* maxtapchange=0
+Batchedit RegControl..* maxtapchange=0
 
 !solve
 !Buscoords IEEE34_BusXY.csv
