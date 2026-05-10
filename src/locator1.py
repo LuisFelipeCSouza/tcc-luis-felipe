@@ -92,8 +92,6 @@ class FaultLocator:
             
             # 1. Varredura por circuito principal
             for c_name, circuit_lines in self.topology.main_circuits.items():
-                lista_reatancia = []
-                lista_distancia = []
                 dist_accum_units = 0.0
                 falta_encontrada = False
                 reatancia_anterior = None
@@ -138,7 +136,6 @@ class FaultLocator:
                     # --- CHEGAMOS NO INÍCIO DA LINHA ALVO ---
                     z_matrix_alvo = self.topology.line_data[linha_alvo]['zmatrix']
                     length_alvo_native = self.topology.line_data[linha_alvo]['length']
-                    
                     Z_L = z_matrix_alvo * length_alvo_native
                     Z_ckt = Z_accum + Z_L
                     
@@ -161,7 +158,7 @@ class FaultLocator:
 
                     for m in m_steps:
                         dist_atual_units = dist_accum_units + (length_alvo_native * m)
-                        dist_accum_units += length_alvo_m * 0.01
+                        # dist_accum_units += length_alvo_m * 0.01
                         Z_trecho = z_matrix_alvo * length_alvo_native * m
 
                         # A matemática fica restrita APENAS à linha alvo
