@@ -92,6 +92,8 @@ class FaultLocator:
             
             # 1. Varredura por circuito principal
             for c_name, circuit_lines in self.topology.main_circuits.items():
+                lista_reatancia = []
+                lista_distancia = []
                 dist_accum_units = 0.0
                 falta_encontrada = False
                 reatancia_anterior = None
@@ -111,8 +113,8 @@ class FaultLocator:
                     I_pref = self.pre_fault[sensor]['i']
                     
                     # 3. Busca o Regime Faltoso (Pós-falta) DESTE Sensor
-                    v_pos_a = complex(row[f'{sensor}_va_r'], row[f'{sensor}_va_i'])
                     v_pos_b = complex(row[f'{sensor}_vb_r'], row[f'{sensor}_vb_i'])
+                    v_pos_a = complex(row[f'{sensor}_va_r'], row[f'{sensor}_va_i'])
                     v_pos_c = complex(row[f'{sensor}_vc_r'], row[f'{sensor}_vc_i'])
                     
                     i_pos_a = complex(row[f'{sensor}_ia_r'], row[f'{sensor}_ia_i'])
@@ -159,13 +161,14 @@ class FaultLocator:
 
                     for m in m_steps:
                         dist_atual_units = dist_accum_units + (length_alvo_native * m)
+                        dist_accum_units += length_alvo_m * 0.01
                         Z_trecho = z_matrix_alvo * length_alvo_native * m
 
                         # A matemática fica restrita APENAS à linha alvo
                         Z_montante = Z_accum + Z_trecho
                         Z_jusante = Z_total - Z_montante
 
-                        V_f = V_pos - Z_trecho @ I_pos
+                        V_f = V_pos - Z_montante @ I_pos
 
                         try:
                             Yeq = np.linalg.inv(Z_jusante)
@@ -176,25 +179,30 @@ class FaultLocator:
 
                         reatancia = self._calcular_reatancia(row['tipo'], V_f, I_f)
 
-                        if reatancia < 0:
+                        if reatancia <= 0:
                             falta_encontrada = True
-                            if reatancia_anterior is not None:
-                                # Interpolação linear
-                                dist_interp = dist_anterior - (reatancia * ((dist_atual_units - dist_anterior) / (reatancia - reatancia_anterior)))
+                            
+                            if reatancia_anterior is not None and reatancia_anterior > 0:
+                                denominador = (reatancia - reatancia_anterior)
+                                if denominador != 0:
+                                    dist_interp = dist_anterior_units - (reatancia_anterior * ((dist_atual_units - dist_anterior_units) / denominador))
+                                else:
+                                    dist_interp = dist_atual_units
                             else:
-                                dist_interp = dist_accum_units
+                                dist_interp = dist_atual_units
 
-                            # Salva os resultados convertendo a unidade nativa para Metros
                             dist_meters = UnitConverter.to_km(dist_interp, self.units) * 1000.0
                             self.df.at[index, f'{c_name}_line'] = linha_alvo
                             self.df.at[index, f'{c_name}_d'] = dist_meters
                             break
 
                         reatancia_anterior = reatancia
-                        dist_anterior = dist_accum_units
+                        dist_anterior_units = dist_atual_units
 
                     if falta_encontrada:
                         break
+
+                    dist_accum_units += length_alvo_native
                         
                     # Se terminou a linha e não cruzou zero, associa ao último nó
                 if not falta_encontrada:

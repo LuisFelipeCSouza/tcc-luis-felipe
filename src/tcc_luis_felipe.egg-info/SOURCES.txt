@@ -1,9 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-src/tcc_luis_felipe.egg-info/PKG-INFO
-src/tcc_luis_felipe.egg-info/SOURCES.txt
-src/tcc_luis_felipe.egg-info/dependency_links.txt
-src/tcc_luis_felipe.egg-info/requires.txt
-src/tcc_luis_felipe.egg-info/top_level.txt
-tests/teste.py
