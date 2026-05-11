@@ -9,3 +9,19 @@ New PVSystem.PV1 phases=3 Bus1=848 kV=24.9 kVA=800 irrad=1 Pmpp=800
 !~ SafeVoltage=0
 ! ~ Daily=my_shape1_pv TDaily=MyTemp
 ! ~ Model=2 SafeVoltage=0 LimitCurrent=No
+
+New PVSystem.PV2 phases=3 Bus1=860 kV=24.9 kVA=100 irrad=1 Pmpp=800
+~ temperature=25 PF=1 EffCurve=MyEff P-TCurve=MyPvsT
+~ Model=1
+~ Vminpu = 0
+!~ SafeVoltage=0
+! ~ Daily=my_shape1_pv TDaily=MyTemp
+! ~ Model=2 SafeVoltage=0 LimitCurrent=No
+
+New PVSystem.PV3 phases=1 Bus1=820.1 kV=24.9 kVA=150 irrad=1 Pmpp=800
+~ temperature=25 PF=1 EffCurve=MyEff P-TCurve=MyPvsT
+~ Model=1
+~ Vminpu = 0
+!~ SafeVoltage=0
+! ~ Daily=my_shape1_pv TDaily=MyTemp
+! ~ Model=2 SafeVoltage=0 LimitCurrent=No

@@ -12,12 +12,12 @@ Batchedit RegControl..* maxtapchange=0
 
 Redirect Pvsystem.dss
 
-New Fault.falta phases=3 bus=850 r=0.001
+! New Fault.falta phases=3 bus=850 r=0.001
 
 set controlmode=off
 set MaxIterations=200
 
-solve
+! solve
 !Buscoords IEEE34_BusXY.csv
 
 !Show voltage LN Nodes
