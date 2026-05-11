@@ -23,8 +23,8 @@ New object=circuit.ieee123
 ! the first line defines the 3-phase transformer to be controlled by the regulator control.
 ! The 2nd line defines the properties of the regulator control according to the test case
 
-new transformer.reg1a phases=3 windings=2 buses=[150 150r] conns=[wye wye] kvs=[4.16 4.16] kvas=[5000 5000] XHL=.001 %LoadLoss=0.00001 ppm=0.0
-new regcontrol.creg1a transformer=reg1a winding=2 vreg=120 band=2 ptratio=20 ctprim=700 R=3 X=7.5
+! new transformer.reg1a phases=3 windings=2 buses=[150 150r] conns=[wye wye] kvs=[4.16 4.16] kvas=[5000 5000] XHL=.001 %LoadLoss=0.00001 ppm=0.0
+! new regcontrol.creg1a transformer=reg1a winding=2 vreg=120 band=2 ptratio=20 ctprim=700 R=3 X=7.5
 
 ! REDIRECT INPUT STREAM TO FILE CONTAINING DEFINITIONS OF LINECODES
 ! This file defines the line impedances is a similar manner to the description in the test case.
@@ -171,7 +171,7 @@ New Line.L117   Phases=3 Bus1=160.1.2.3 Bus2=67.1.2.3   LineCode=6    Length=0.3
 ! NORMALLY CLOSED SWITCHES ARE DEFINED AS SHORT LINES
 ! Could also be defned by setting the Switch=Yes property
 
-New Line.Sw1    phases=3  Bus1=150r   Bus2=149    switch=yes r1=1e-3 r0=1e-3 x1=0.000 x0=0.000 c1=0.000 c0=0.000 Length=0.001
+New Line.Sw1    phases=3  Bus1=150   Bus2=149    switch=yes r1=1e-3 r0=1e-3 x1=0.000 x0=0.000 c1=0.000 c0=0.000 Length=0.001
 New Line.Sw2    phases=3  Bus1=13     Bus2=152    switch=yes r1=1e-3 r0=1e-3 x1=0.000 x0=0.000 c1=0.000 c0=0.000 Length=0.001
 New Line.Sw3    phases=3  Bus1=18     Bus2=135    switch=yes r1=1e-3 r0=1e-3 x1=0.000 x0=0.000 c1=0.000 c0=0.000 Length=0.001
 New Line.Sw4    phases=3  Bus1=60     Bus2=160    switch=yes r1=1e-3 r0=1e-3 x1=0.000 x0=0.000 c1=0.000 c0=0.000 Length=0.001
@@ -187,9 +187,9 @@ New Line.Sw8    phases=1  Bus1=54.1   Bus2=94_OPEN.1  switch=yes r1=1e-3 r0=1e-3
 ! LOAD TRANSFORMER AT 61s/610
 ! This is a 150 kVA Delta-Delta stepdown from 4160V to 480V.
 
-New Transformer.XFM1  Phases=3   Windings=2 Xhl=2.72
-~ wdg=1 bus=61s       conn=Delta kv=4.16    kva=150    %r=0.635
-~ wdg=2 bus=610       conn=Delta kv=0.48    kva=150    %r=0.635
+! New Transformer.XFM1  Phases=3   Windings=2 Xhl=2.72
+! ~ wdg=1 bus=61s       conn=Delta kv=4.16    kva=150    %r=0.635
+! ~ wdg=2 bus=610       conn=Delta kv=0.48    kva=150    %r=0.635
 
 ! CAPACITORS
 ! Capacitors are 2-terminal devices. The 2nd terminal (Bus2=...) defaults to all phases
