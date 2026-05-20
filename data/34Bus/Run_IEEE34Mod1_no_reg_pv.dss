@@ -4,6 +4,8 @@
 
 ! change the path name to match where it is actually installed on your computer
 
+Clear
+
 Compile ieee34Mod1_no_reg.dss
 
 New Energymeter.M1  Line.L1  1
@@ -12,12 +14,22 @@ Batchedit RegControl..* maxtapchange=0
 
 Redirect Pvsystem.dss
 
-! New Fault.falta phases=3 bus=850 r=0.001
-
-set controlmode=off
+!set controlmode=off
 set MaxIterations=200
 
-! solve
+Solve mode=snapshot
+
+set LoadModel=Admittance
+
+new monitor.mon_pv_current element=pvsystem.pv1 terminal=1 mode=0
+
+solve mode=dynamics number=1 stepsize=0.001
+
+
+New Fault.falta phases=3 bus=850 r=0.001
+solve number=50
+
+!solve
 !Buscoords IEEE34_BusXY.csv
 
 !Show voltage LN Nodes
