@@ -100,13 +100,23 @@ class FeederTopology:
                     z_3x3 = np.zeros((3,3), dtype=complex)
                     phase_map = {'1': 0, '2': 1, '3': 2}
 
-                    for i, ph_i in enumerate(phases):
-                        if ph_i in phase_map:
-                            idx_i = phase_map[ph_i]
-                            for j, ph_j in enumerate(phases):
-                                if ph_j in phase_map:
-                                    idx_j = phase_map[ph_j]
-                                    z_3x3[idx_i, idx_j] = z_base[i, j]
+                    phase_positions = {ph: pos for pos, ph in enumerate(phases)}
+
+                    # for i, ph_i in enumerate(phases):
+                    #     if ph_i in phase_map:
+                    #         idx_i = phase_map[ph_i]
+                    #         for j, ph_j in enumerate(phases):
+                    #             if ph_j in phase_map:
+                    #                 idx_j = phase_map[ph_j]
+                    #                 z_3x3[idx_i, idx_j] = z_base[i, j]
+
+                    for ph_i, i in phase_positions.items():
+                        for ph_j, j in phase_positions.items():
+                            idx_i = int(i)
+                            idx_j = int(j)
+                            target_i = phase_map[ph_i]
+                            target_j = phase_map[ph_j]
+                            z_3x3[target_i, target_j] = z_base[idx_i, idx_j]
 
                     data[name] = {
                         'linecode': self.dss.lines.linecode,
@@ -324,6 +334,36 @@ class FeederTopology:
             print(f"C_{idx}: L = {comprimento_total:.2f} | Q = {quantidade} | seçoes: [{secoes_str}]")
             
         print("\n" + "="*60 + "\n")
+
+    def print_ciruit_buses(self):
+
+        if self.source_bus in self.graph.nodes:
+            root = self.source_bus
+        else:
+            roots = [n for n, d in self.graph.in_degree() if d == 0][0]
+            if not roots:
+                print(f"Aviso: Barra de origem '{self.source_bus}' não encontrada e não há nós com grau de entrada zero.")
+                return {}
+            root = roots[0]
+            print(f"Raiz do alimentador: {root}")
+
+        leaves = [n for n, d in self.graph.out_degree() if d == 0]
+
+        circuits = {}
+        for i, leaf in enumerate(leaves):
+            try:
+                path_nodes = nx.shortest_path(self.graph, root, leaf)
+                circuits[f'circuito_{i+1}'] = path_nodes
+            except nx.NetworkXNoPath:
+                continue
+
+        circuitos_ordenados = sorted(circuits.items(), key=lambda item: len(item[1]))
+
+        for idx, (nome_circuito, buses) in enumerate(circuitos_ordenados, start=1):
+            quantidade = len(buses)
+            buses_str = "-".join([bus.upper() for bus in buses])
+            print(f"C_{idx}: Q = {quantidade} | buses: [{buses_str}]")
+
 
 if __name__ == "__main__":
     # Exemplo de uso
