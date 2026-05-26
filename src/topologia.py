@@ -33,12 +33,20 @@ class FeederTopology:
         # 1. Mapear Linhas
         self.dss.lines.first()
         for _ in range(self.dss.lines.count):
-
             name = self.dss.lines.name.lower()
             b1 = self.dss.lines.bus1.split('.')[0].lower()
             b2 = self.dss.lines.bus2.split('.')[0].lower()
 
             if self._is_target_voltage(b1) and self._is_target_voltage(b2):
+
+                self.dss.circuit.set_active_element(f'line.{name}')
+
+                is_open = self.dss.cktelement._is_terminal_open()
+
+                if is_open:
+                    self.dss.lines.next()
+                    continue
+
                 if self.dss.text(f"? Line.{name}.switch").strip().lower() == 'true':
                     line_type = 'switch'
                 else:
