@@ -40,6 +40,16 @@ class FeederTopology:
             b2 = self.dss.lines.bus2.split('.')[0].lower()
 
             if self._is_target_voltage(b1) and self._is_target_voltage(b2):
+
+                self.dss.circuit.set_active_element(f'line.{name}')
+
+                #is_open = self.dss.cktelement._is_terminal_open()
+                is_open = bool(self.dss.cktelement.is_terminal_open(1)) or bool(self.dss.cktelement.is_terminal_open(2))
+
+                if is_open:
+                    self.dss.lines.next()
+                    continue
+
                 if self.dss.text(f"? Line.{name}.switch").strip().lower() == 'true':
                     line_type = 'switch'
                 else:
