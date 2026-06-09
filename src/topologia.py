@@ -41,7 +41,8 @@ class FeederTopology:
 
                 self.dss.circuit.set_active_element(f'line.{name}')
 
-                is_open = self.dss.cktelement._is_terminal_open()
+                #is_open = self.dss.cktelement._is_terminal_open()
+                is_open = bool(self.dss.cktelement.is_terminal_open(1)) or bool(self.dss.cktelement.is_terminal_open(2))
 
                 if is_open:
                     self.dss.lines.next()
