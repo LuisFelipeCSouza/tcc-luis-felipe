@@ -1,0 +1,7 @@
+Clear
+
+Compile ieee34Mod1_reg_neutral_tap.dss
+
+New Energymeter.M1  Line.L1  1
+
+Batchedit RegControl..* maxtapchange=0
