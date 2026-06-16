@@ -1,0 +1,65 @@
+Clear
+
+Compile (IEEE123Master.dss)
+
+New Fault.myFault phases=1 bus1=105.1 r=0.0001
+Fault.myFault.enabled=False
+
+Batchedit RegControl..* maxtapchange=0
+
+Set MaxControlIter=30
+
+New EnergyMeter.Feeder Line.L115 1
+
+new Transformer.TPV1 phases=3 windings=2 buses=(PVBus 108) conns=(wye delta) kvs=(0.48 4.16) kvas=(1000 1000) taps='1 1' XHL=0.5
+
+New Loadshape.my_shape1_pv npts=24 Interval=1 mult=(0.000000, 0.000000, 0.000000, 0.000000, 0.000042, 0.021757, 0.085157, 0.346940, 0.631345, 0.812033, 0.929790, 0.980565, 1.000000, 0.956750, 0.849003, 0.703315, 0.383708, 0.188408, 0.045091, 0.002161, 0.000000, 0.000000, 0.000000, 0.000000)
+
+New DynamicExp.myDiffEq nvariables=4 varnames=[it vdc modul vac]
+~ expression=[it dt = 1 0.61059E-3 / ( -0.230187 it * modul vdc * + vac - ) *]
+
+New "PVSystem.myPV" phases=3 conn=delta bus1=PVBus kV=0.48 kva=500 pmpp=500 %R=50 %X=50
+~ kP=0.01 KVDC=0.700 PITol=0.1
+~ SafeVoltage=0
+~ Daily=my_shape1_pv
+~ DynamicEq=myDiffEq
+~ it = imag vdc = kvdc modul=mod vac = vmag
+~ DynOut = [it]
+~ Vminpu=0.001
+
+New InvControl.StoCtrl DERList=[PVSystem.myPV] mode=GFM !eventlog=yes
+
+New "Monitor.feederhead" element=line.l115 mode=0 terminal=1
+New "Monitor.pvmonitor" element=pvsystem.mypv mode=1 terminal=1 PPolar=no residual=no VIPolar=yes
+New "Monitor.pvvi" element=pvsystem.mypv mode=0 terminal=1
+
+calcv
+solve
+
+Buscoords BusCoords.dat
+
+/*
+!10 horas em daily
+set mode =daily
+set number=10
+solve
+
+!metade da dinamica sem falta
+set mode=dynamics steptime=0.001 maxiterations=500 number=500
+set loadshapeclass=daily
+set time=(10,0)
+solve
+
+!metade da dinamica com falta
+set number=500
+Fault.myFault.enabled=True
+solve
+*/
+
+/*
+!13 horas em daily
+set mode=daily
+set number=13
+Fault.myFault.enabled=False
+solve
+*/

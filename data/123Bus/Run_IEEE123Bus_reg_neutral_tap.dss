@@ -1,0 +1,11 @@
+Clear
+
+Compile (IEEE123Master_reg_neutral_tap.dss)
+
+Set MaxControlIter=30
+
+New EnergyMeter.Feeder Line.L115 1
+
+Buscoords BusCoords.dat   ! load in bus coordinates
+
+
