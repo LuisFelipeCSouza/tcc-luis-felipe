@@ -1,0 +1,2241 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Análise e Localização de Curto-Circuito em Redes de Distribuição">
+      
+      
+        <meta name="author" content="Luis Felipe Carneiro de Souza">
+      
+      
+        <link rel="canonical" href="https://LuisFelipeCSouza.github.io/tcc-luis-felipe/reference/funcoes/">
+      
+      
+        <link rel="prev" href="../../how-to/ajuste-parametros/">
+      
+      
+        <link rel="next" href="../topologia/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Módulo de Funções (funcoes.py) - Simulador de Faltas - Luis Felipe</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#modulo-de-funcoes-auxiliares" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href="../.." title="Simulador de Faltas - Luis Felipe" class="md-header__button md-logo" aria-label="Simulador de Faltas - Luis Felipe" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Simulador de Faltas - Luis Felipe
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Módulo de Funções (funcoes.py)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="indigo"  aria-hidden="true"  type="radio" name="__palette" id="__palette_1">
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Início
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/primeira-simulacao/" class="md-tabs__link">
+          
+  
+  
+  Tutorial
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../how-to/configurar-34-bus/" class="md-tabs__link">
+          
+  
+  
+  Guias de Uso
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Referência da API
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../explanation/teoria-reatancia/" class="md-tabs__link">
+          
+  
+  
+  Teoria e Conceitos
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Simulador de Faltas - Luis Felipe" class="md-nav__button md-logo" aria-label="Simulador de Faltas - Luis Felipe" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Simulador de Faltas - Luis Felipe
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Início
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorial
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorial
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/primeira-simulacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Executando sua primeira simulação
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guias de Uso
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guias de Uso
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/configurar-34-bus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configurando o modelo 34 Barras
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../how-to/ajuste-parametros/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Personalizando Resistências de Falta
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Referência da API
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Referência da API
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de Funções (funcoes.py)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Módulo de Funções (funcoes.py)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.funcoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        funcoes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="funcoes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.create_network_graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        create_network_graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.dict_circuitos_func" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dict_circuitos_func
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.format_abs_sensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        format_abs_sensor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.get_sensor_locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_sensor_locations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.lista_sensores_fc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lista_sensores_fc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.measurement_dict_fc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        measurement_dict_fc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.parametro_de_falta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametro_de_falta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.processamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        processamento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.reatancia_calc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reatancia_calc
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../topologia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topologia da Rede (topologia.py)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../automacao/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Automação (automacao.py)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../minima_reatancia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mínima Reatância (minima_reatancia.py)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Teoria e Conceitos
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Teoria e Conceitos
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanation/teoria-reatancia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Método da Mínima Reatância
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanation/smart-meters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integração com Smart Meters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#src.funcoes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        funcoes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="funcoes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.create_network_graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        create_network_graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.dict_circuitos_func" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dict_circuitos_func
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.format_abs_sensor" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        format_abs_sensor
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.get_sensor_locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_sensor_locations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.lista_sensores_fc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lista_sensores_fc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.measurement_dict_fc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        measurement_dict_fc
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.parametro_de_falta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametro_de_falta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.processamento" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        processamento
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#src.funcoes.reatancia_calc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        reatancia_calc
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="modulo-de-funcoes-auxiliares">Módulo de Funções Auxiliares</h1>
+<p>Documentação das funções de suporte para cálculo de impedância e manipulação de grafos.</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="src.funcoes" class="doc doc-heading">
+            <code>src.funcoes</code>
+
+
+</h2>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.create_network_graph" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">create_network_graph</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Cria e retorna um grafo direcionado (networkx.DiGraph) que representa a topologia da rede IEEE 34 Barras.</p>
+<p>As arestas do grafo representam os segmentos de linha, e os nos representam as barras.
+Cada aresta possui um 'label' que corresponde ao nome da linha no OpenDSS.</p>
+
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>nx.DiGraph: Um objeto de grafo do NetworkX representando a rede.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_network_graph</span><span class="p">():</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="sd">    Cria e retorna um grafo direcionado (networkx.DiGraph) que representa a topologia da rede IEEE 34 Barras.</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="sd">    As arestas do grafo representam os segmentos de linha, e os nos representam as barras.</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="sd">    Cada aresta possui um &#39;label&#39; que corresponde ao nome da linha no OpenDSS.</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="sd">    Retorna:</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="sd">        nx.DiGraph: Um objeto de grafo do NetworkX representando a rede.</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52"></a>
+<a id="__codelineno-0-53" name="__codelineno-0-53"></a>    <span class="n">g</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54"></a>    <span class="n">arestas</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a>        <span class="p">(</span><span class="s1">&#39;800&#39;</span><span class="p">,</span> <span class="s1">&#39;802&#39;</span><span class="p">,</span> <span class="s1">&#39;l1&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;802&#39;</span><span class="p">,</span> <span class="s1">&#39;806&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;806&#39;</span><span class="p">,</span> <span class="s1">&#39;808&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a>        <span class="p">(</span><span class="s1">&#39;808&#39;</span><span class="p">,</span> <span class="s1">&#39;810&#39;</span><span class="p">,</span> <span class="s1">&#39;l4&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;808&#39;</span><span class="p">,</span> <span class="s1">&#39;812&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;812&#39;</span><span class="p">,</span> <span class="s1">&#39;814&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a>        <span class="p">(</span><span class="s1">&#39;814r&#39;</span><span class="p">,</span> <span class="s1">&#39;850&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;816&#39;</span><span class="p">,</span> <span class="s1">&#39;818&#39;</span><span class="p">,</span> <span class="s1">&#39;l8&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;816&#39;</span><span class="p">,</span> <span class="s1">&#39;824&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a>        <span class="p">(</span><span class="s1">&#39;818&#39;</span><span class="p">,</span> <span class="s1">&#39;820&#39;</span><span class="p">,</span> <span class="s1">&#39;l10&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;820&#39;</span><span class="p">,</span> <span class="s1">&#39;822&#39;</span><span class="p">,</span> <span class="s1">&#39;l11&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;824&#39;</span><span class="p">,</span> <span class="s1">&#39;826&#39;</span><span class="p">,</span> <span class="s1">&#39;l12&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a>        <span class="p">(</span><span class="s1">&#39;824&#39;</span><span class="p">,</span> <span class="s1">&#39;828&#39;</span><span class="p">,</span> <span class="s1">&#39;l13&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;828&#39;</span><span class="p">,</span> <span class="s1">&#39;830&#39;</span><span class="p">,</span> <span class="s1">&#39;l14&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;830&#39;</span><span class="p">,</span> <span class="s1">&#39;854&#39;</span><span class="p">,</span> <span class="s1">&#39;l15&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60"></a>        <span class="p">(</span><span class="s1">&#39;832&#39;</span><span class="p">,</span> <span class="s1">&#39;858&#39;</span><span class="p">,</span> <span class="s1">&#39;l16&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;834&#39;</span><span class="p">,</span> <span class="s1">&#39;860&#39;</span><span class="p">,</span> <span class="s1">&#39;l17&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;834&#39;</span><span class="p">,</span> <span class="s1">&#39;842&#39;</span><span class="p">,</span> <span class="s1">&#39;l18&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61"></a>        <span class="p">(</span><span class="s1">&#39;836&#39;</span><span class="p">,</span> <span class="s1">&#39;840&#39;</span><span class="p">,</span> <span class="s1">&#39;l19&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;836&#39;</span><span class="p">,</span> <span class="s1">&#39;862&#39;</span><span class="p">,</span> <span class="s1">&#39;l20&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;842&#39;</span><span class="p">,</span> <span class="s1">&#39;844&#39;</span><span class="p">,</span> <span class="s1">&#39;l21&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62"></a>        <span class="p">(</span><span class="s1">&#39;844&#39;</span><span class="p">,</span> <span class="s1">&#39;846&#39;</span><span class="p">,</span> <span class="s1">&#39;l22&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;846&#39;</span><span class="p">,</span> <span class="s1">&#39;848&#39;</span><span class="p">,</span> <span class="s1">&#39;l23&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;850&#39;</span><span class="p">,</span> <span class="s1">&#39;816&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a>        <span class="p">(</span><span class="s1">&#39;852r&#39;</span><span class="p">,</span> <span class="s1">&#39;832&#39;</span><span class="p">,</span> <span class="s1">&#39;l25&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;854&#39;</span><span class="p">,</span> <span class="s1">&#39;856&#39;</span><span class="p">,</span> <span class="s1">&#39;l26&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;854&#39;</span><span class="p">,</span> <span class="s1">&#39;852&#39;</span><span class="p">,</span> <span class="s1">&#39;l27&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a>        <span class="p">(</span><span class="s1">&#39;858&#39;</span><span class="p">,</span> <span class="s1">&#39;864&#39;</span><span class="p">,</span> <span class="s1">&#39;l28&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;858&#39;</span><span class="p">,</span> <span class="s1">&#39;834&#39;</span><span class="p">,</span> <span class="s1">&#39;l29&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;860&#39;</span><span class="p">,</span> <span class="s1">&#39;836&#39;</span><span class="p">,</span> <span class="s1">&#39;l30&#39;</span><span class="p">),</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a>        <span class="p">(</span><span class="s1">&#39;862&#39;</span><span class="p">,</span> <span class="s1">&#39;838&#39;</span><span class="p">,</span> <span class="s1">&#39;l31&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;814&#39;</span><span class="p">,</span> <span class="s1">&#39;814r&#39;</span><span class="p">,</span> <span class="s1">&#39;reg1&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;852&#39;</span><span class="p">,</span> <span class="s1">&#39;852r&#39;</span><span class="p">,</span> <span class="s1">&#39;reg2&#39;</span><span class="p">)</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="p">]</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="k">for</span> <span class="n">bus1</span><span class="p">,</span> <span class="n">bus2</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">arestas</span><span class="p">:</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a>        <span class="n">g</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">bus1</span><span class="p">,</span> <span class="n">bus2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="k">return</span> <span class="n">g</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.dict_circuitos_func" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">dict_circuitos_func</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Define e retorna um dicionario com os caminhos dos circuitos principais do alimentador IEEE 34 Barras.</p>
+<p>Cada circuito representa um caminho unico da subestacao ate um ponto terminal da rede.
+Esta funcao utiliza valores 'hardcoded', ou seja, fixos no codigo. Uma abordagem mais
+avancada poderia gerar esses caminhos dinamicamente a partir do grafo da rede.</p>
+
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>dict: Um dicionario onde as chaves sao os nomes dos circuitos (ex: 'circuito1') e
+      os valores sao listas de strings com os nomes das linhas que compoem o caminho.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">dict_circuitos_func</span><span class="p">():</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="sd">        Define e retorna um dicionario com os caminhos dos circuitos principais do alimentador IEEE 34 Barras.</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="sd">        Cada circuito representa um caminho unico da subestacao ate um ponto terminal da rede.</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="sd">        Esta funcao utiliza valores &#39;hardcoded&#39;, ou seja, fixos no codigo. Uma abordagem mais</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="sd">        avancada poderia gerar esses caminhos dinamicamente a partir do grafo da rede.</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="sd">        Retorna:</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="sd">            dict: Um dicionario onde as chaves sao os nomes dos circuitos (ex: &#39;circuito1&#39;) e</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="sd">                  os valores sao listas de strings com os nomes das linhas que compoem o caminho.</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a>    <span class="n">circuito1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l4&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a>    <span class="n">circuito2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l8&#39;</span><span class="p">,</span> <span class="s1">&#39;l10&#39;</span><span class="p">,</span> <span class="s1">&#39;l11&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a>    <span class="n">circuito3</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">,</span> <span class="s1">&#39;l12&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a>    <span class="n">circuito4</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">,</span> <span class="s1">&#39;l13&#39;</span><span class="p">,</span> <span class="s1">&#39;l14&#39;</span><span class="p">,</span> <span class="s1">&#39;l15&#39;</span><span class="p">,</span> <span class="s1">&#39;l26&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a>    <span class="n">circuito5</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">,</span> <span class="s1">&#39;l13&#39;</span><span class="p">,</span> <span class="s1">&#39;l14&#39;</span><span class="p">,</span> <span class="s1">&#39;l15&#39;</span><span class="p">,</span> <span class="s1">&#39;l27&#39;</span><span class="p">,</span> <span class="s1">&#39;l25&#39;</span><span class="p">,</span> <span class="s1">&#39;l16&#39;</span><span class="p">,</span> <span class="s1">&#39;l28&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a>    <span class="n">circuito6</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">,</span> <span class="s1">&#39;l13&#39;</span><span class="p">,</span> <span class="s1">&#39;l14&#39;</span><span class="p">,</span> <span class="s1">&#39;l15&#39;</span><span class="p">,</span> <span class="s1">&#39;l27&#39;</span><span class="p">,</span> <span class="s1">&#39;l25&#39;</span><span class="p">,</span> <span class="s1">&#39;l16&#39;</span><span class="p">,</span> <span class="s1">&#39;l29&#39;</span><span class="p">,</span> <span class="s1">&#39;l18&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a>                 <span class="s1">&#39;l21&#39;</span><span class="p">,</span> <span class="s1">&#39;l22&#39;</span><span class="p">,</span> <span class="s1">&#39;l23&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="n">circuito7</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">,</span> <span class="s1">&#39;l13&#39;</span><span class="p">,</span> <span class="s1">&#39;l14&#39;</span><span class="p">,</span> <span class="s1">&#39;l15&#39;</span><span class="p">,</span> <span class="s1">&#39;l27&#39;</span><span class="p">,</span> <span class="s1">&#39;l25&#39;</span><span class="p">,</span> <span class="s1">&#39;l16&#39;</span><span class="p">,</span> <span class="s1">&#39;l29&#39;</span><span class="p">,</span> <span class="s1">&#39;l17&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a>                 <span class="s1">&#39;l30&#39;</span><span class="p">,</span> <span class="s1">&#39;l20&#39;</span><span class="p">,</span> <span class="s1">&#39;l31&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="n">circuito8</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;l1&#39;</span><span class="p">,</span> <span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="s1">&#39;l3&#39;</span><span class="p">,</span> <span class="s1">&#39;l5&#39;</span><span class="p">,</span> <span class="s1">&#39;l6&#39;</span><span class="p">,</span> <span class="s1">&#39;l7&#39;</span><span class="p">,</span> <span class="s1">&#39;l24&#39;</span><span class="p">,</span> <span class="s1">&#39;l9&#39;</span><span class="p">,</span> <span class="s1">&#39;l13&#39;</span><span class="p">,</span> <span class="s1">&#39;l14&#39;</span><span class="p">,</span> <span class="s1">&#39;l15&#39;</span><span class="p">,</span> <span class="s1">&#39;l27&#39;</span><span class="p">,</span> <span class="s1">&#39;l25&#39;</span><span class="p">,</span> <span class="s1">&#39;l16&#39;</span><span class="p">,</span> <span class="s1">&#39;l29&#39;</span><span class="p">,</span> <span class="s1">&#39;l17&#39;</span><span class="p">,</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a>                 <span class="s1">&#39;l30&#39;</span><span class="p">,</span> <span class="s1">&#39;l19&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a>    <span class="n">dict_circuitos</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;circuito1&#39;</span><span class="p">:</span> <span class="n">circuito1</span><span class="p">,</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a>                      <span class="s1">&#39;circuito2&#39;</span><span class="p">:</span> <span class="n">circuito2</span><span class="p">,</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a>                      <span class="s1">&#39;circuito3&#39;</span><span class="p">:</span> <span class="n">circuito3</span><span class="p">,</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a>                      <span class="s1">&#39;circuito4&#39;</span><span class="p">:</span> <span class="n">circuito4</span><span class="p">,</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a>                      <span class="s1">&#39;circuito5&#39;</span><span class="p">:</span> <span class="n">circuito5</span><span class="p">,</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a>                      <span class="s1">&#39;circuito6&#39;</span><span class="p">:</span> <span class="n">circuito6</span><span class="p">,</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a>                      <span class="s1">&#39;circuito7&#39;</span><span class="p">:</span> <span class="n">circuito7</span><span class="p">,</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a>                      <span class="s1">&#39;circuito8&#39;</span><span class="p">:</span> <span class="n">circuito8</span><span class="p">}</span> 
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="k">return</span> <span class="n">dict_circuitos</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.format_abs_sensor" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">format_abs_sensor</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">,</span> <span class="n">phases</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Formata uma medicao de corrente bruta do DSS e retorna uma lista com os valores
+de magnitude (absolutos) para as fases A, B e C.</p>
+
+
+<details class="parametros" open>
+  <summary>Parametros</summary>
+  <p>list_measurement (list): Lista de floats do DSS (partes real e imaginaria).
+phases (list): Lista de strings com as fases presentes (ex: ['1']).</p>
+</details>
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>list: Uma lista de 3 floats com as magnitudes das correntes [IA, IB, IC].</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-278">278</a></span>
+<span class="normal"><a href="#__codelineno-0-279">279</a></span>
+<span class="normal"><a href="#__codelineno-0-280">280</a></span>
+<span class="normal"><a href="#__codelineno-0-281">281</a></span>
+<span class="normal"><a href="#__codelineno-0-282">282</a></span>
+<span class="normal"><a href="#__codelineno-0-283">283</a></span>
+<span class="normal"><a href="#__codelineno-0-284">284</a></span>
+<span class="normal"><a href="#__codelineno-0-285">285</a></span>
+<span class="normal"><a href="#__codelineno-0-286">286</a></span>
+<span class="normal"><a href="#__codelineno-0-287">287</a></span>
+<span class="normal"><a href="#__codelineno-0-288">288</a></span>
+<span class="normal"><a href="#__codelineno-0-289">289</a></span>
+<span class="normal"><a href="#__codelineno-0-290">290</a></span>
+<span class="normal"><a href="#__codelineno-0-291">291</a></span>
+<span class="normal"><a href="#__codelineno-0-292">292</a></span>
+<span class="normal"><a href="#__codelineno-0-293">293</a></span>
+<span class="normal"><a href="#__codelineno-0-294">294</a></span>
+<span class="normal"><a href="#__codelineno-0-295">295</a></span>
+<span class="normal"><a href="#__codelineno-0-296">296</a></span>
+<span class="normal"><a href="#__codelineno-0-297">297</a></span>
+<span class="normal"><a href="#__codelineno-0-298">298</a></span>
+<span class="normal"><a href="#__codelineno-0-299">299</a></span>
+<span class="normal"><a href="#__codelineno-0-300">300</a></span>
+<span class="normal"><a href="#__codelineno-0-301">301</a></span>
+<span class="normal"><a href="#__codelineno-0-302">302</a></span>
+<span class="normal"><a href="#__codelineno-0-303">303</a></span>
+<span class="normal"><a href="#__codelineno-0-304">304</a></span>
+<span class="normal"><a href="#__codelineno-0-305">305</a></span>
+<span class="normal"><a href="#__codelineno-0-306">306</a></span>
+<span class="normal"><a href="#__codelineno-0-307">307</a></span>
+<span class="normal"><a href="#__codelineno-0-308">308</a></span>
+<span class="normal"><a href="#__codelineno-0-309">309</a></span>
+<span class="normal"><a href="#__codelineno-0-310">310</a></span>
+<span class="normal"><a href="#__codelineno-0-311">311</a></span>
+<span class="normal"><a href="#__codelineno-0-312">312</a></span>
+<span class="normal"><a href="#__codelineno-0-313">313</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-278" name="__codelineno-0-278"></a><span class="k">def</span><span class="w"> </span><span class="nf">format_abs_sensor</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">,</span> <span class="n">phases</span><span class="p">):</span>
+<a id="__codelineno-0-279" name="__codelineno-0-279"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-280" name="__codelineno-0-280"></a><span class="sd">        Formata uma medicao de corrente bruta do DSS e retorna uma lista com os valores</span>
+<a id="__codelineno-0-281" name="__codelineno-0-281"></a><span class="sd">        de magnitude (absolutos) para as fases A, B e C.</span>
+<a id="__codelineno-0-282" name="__codelineno-0-282"></a>
+<a id="__codelineno-0-283" name="__codelineno-0-283"></a><span class="sd">        Parametros:</span>
+<a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="sd">            list_measurement (list): Lista de floats do DSS (partes real e imaginaria).</span>
+<a id="__codelineno-0-285" name="__codelineno-0-285"></a><span class="sd">            phases (list): Lista de strings com as fases presentes (ex: [&#39;1&#39;]).</span>
+<a id="__codelineno-0-286" name="__codelineno-0-286"></a>
+<a id="__codelineno-0-287" name="__codelineno-0-287"></a><span class="sd">        Retorna:</span>
+<a id="__codelineno-0-288" name="__codelineno-0-288"></a><span class="sd">            list: Uma lista de 3 floats com as magnitudes das correntes [IA, IB, IC].</span>
+<a id="__codelineno-0-289" name="__codelineno-0-289"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-290" name="__codelineno-0-290"></a>
+<a id="__codelineno-0-291" name="__codelineno-0-291"></a>    <span class="n">sensor_abs</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-292" name="__codelineno-0-292"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">)</span> <span class="o">==</span> <span class="mi">12</span><span class="p">:</span>
+<a id="__codelineno-0-293" name="__codelineno-0-293"></a>        <span class="n">sensor_abs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+<a id="__codelineno-0-294" name="__codelineno-0-294"></a>                      <span class="nb">abs</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
+<a id="__codelineno-0-295" name="__codelineno-0-295"></a>                      <span class="nb">abs</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">5</span><span class="p">])]</span>
+<a id="__codelineno-0-296" name="__codelineno-0-296"></a>
+<a id="__codelineno-0-297" name="__codelineno-0-297"></a>    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+<a id="__codelineno-0-298" name="__codelineno-0-298"></a>        <span class="k">if</span> <span class="n">phases</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-299" name="__codelineno-0-299"></a>            <span class="n">sensor_abs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+<a id="__codelineno-0-300" name="__codelineno-0-300"></a>                          <span class="mf">0.0</span><span class="p">,</span>
+<a id="__codelineno-0-301" name="__codelineno-0-301"></a>                          <span class="mf">0.0</span><span class="p">]</span>
+<a id="__codelineno-0-302" name="__codelineno-0-302"></a>
+<a id="__codelineno-0-303" name="__codelineno-0-303"></a>        <span class="k">elif</span> <span class="n">phases</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-304" name="__codelineno-0-304"></a>            <span class="n">sensor_abs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>
+<a id="__codelineno-0-305" name="__codelineno-0-305"></a>                          <span class="nb">abs</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+<a id="__codelineno-0-306" name="__codelineno-0-306"></a>                          <span class="mf">0.0</span><span class="p">]</span>
+<a id="__codelineno-0-307" name="__codelineno-0-307"></a>
+<a id="__codelineno-0-308" name="__codelineno-0-308"></a>        <span class="k">elif</span> <span class="n">phases</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-309" name="__codelineno-0-309"></a>            <span class="n">sensor_abs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span>
+<a id="__codelineno-0-310" name="__codelineno-0-310"></a>                          <span class="mf">0.0</span><span class="p">,</span>
+<a id="__codelineno-0-311" name="__codelineno-0-311"></a>                          <span class="nb">abs</span><span class="p">(</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">list_measurement</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+<a id="__codelineno-0-312" name="__codelineno-0-312"></a>
+<a id="__codelineno-0-313" name="__codelineno-0-313"></a>    <span class="k">return</span> <span class="n">sensor_abs</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.get_sensor_locations" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_sensor_locations</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">origem</span><span class="p">,</span> <span class="n">aresta_consulta_label</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Identifica a aresta mais a montante (mais proxima da fonte) dentro do caminho
+onde a aresta informada esta contida. Por caminho, define-se como os trechos
+compreendidos em que suas extremidades sao uma barra que possui uma derivacao
+e barra terminal, ou extremidades em que as barras possuem derivacao</p>
+
+
+<details class="nota" open>
+  <summary>Esta funcao tem uma complexidade elevada e pode ser lenta para grafos grandes,</summary>
+  <p>pois gera todos os caminhos a partir de nos de derivacao.</p>
+</details>
+
+<details class="parametros" open>
+  <summary>Parametros</summary>
+  <p>G (nx.DiGraph): O grafo direcionado da rede.
+origem (str): O no de referência (raiz do sistema, ex: '800').
+aresta_consulta_label (str): O nome (label) da aresta para a qual se quer encontrar o sensor.</p>
+</details>
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>tuple: Uma tupla (aresta_montante, label_montante) ou None se nao encontrada.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-71"> 71</a></span>
+<span class="normal"><a href="#__codelineno-0-72"> 72</a></span>
+<span class="normal"><a href="#__codelineno-0-73"> 73</a></span>
+<span class="normal"><a href="#__codelineno-0-74"> 74</a></span>
+<span class="normal"><a href="#__codelineno-0-75"> 75</a></span>
+<span class="normal"><a href="#__codelineno-0-76"> 76</a></span>
+<span class="normal"><a href="#__codelineno-0-77"> 77</a></span>
+<span class="normal"><a href="#__codelineno-0-78"> 78</a></span>
+<span class="normal"><a href="#__codelineno-0-79"> 79</a></span>
+<span class="normal"><a href="#__codelineno-0-80"> 80</a></span>
+<span class="normal"><a href="#__codelineno-0-81"> 81</a></span>
+<span class="normal"><a href="#__codelineno-0-82"> 82</a></span>
+<span class="normal"><a href="#__codelineno-0-83"> 83</a></span>
+<span class="normal"><a href="#__codelineno-0-84"> 84</a></span>
+<span class="normal"><a href="#__codelineno-0-85"> 85</a></span>
+<span class="normal"><a href="#__codelineno-0-86"> 86</a></span>
+<span class="normal"><a href="#__codelineno-0-87"> 87</a></span>
+<span class="normal"><a href="#__codelineno-0-88"> 88</a></span>
+<span class="normal"><a href="#__codelineno-0-89"> 89</a></span>
+<span class="normal"><a href="#__codelineno-0-90"> 90</a></span>
+<span class="normal"><a href="#__codelineno-0-91"> 91</a></span>
+<span class="normal"><a href="#__codelineno-0-92"> 92</a></span>
+<span class="normal"><a href="#__codelineno-0-93"> 93</a></span>
+<span class="normal"><a href="#__codelineno-0-94"> 94</a></span>
+<span class="normal"><a href="#__codelineno-0-95"> 95</a></span>
+<span class="normal"><a href="#__codelineno-0-96"> 96</a></span>
+<span class="normal"><a href="#__codelineno-0-97"> 97</a></span>
+<span class="normal"><a href="#__codelineno-0-98"> 98</a></span>
+<span class="normal"><a href="#__codelineno-0-99"> 99</a></span>
+<span class="normal"><a href="#__codelineno-0-100">100</a></span>
+<span class="normal"><a href="#__codelineno-0-101">101</a></span>
+<span class="normal"><a href="#__codelineno-0-102">102</a></span>
+<span class="normal"><a href="#__codelineno-0-103">103</a></span>
+<span class="normal"><a href="#__codelineno-0-104">104</a></span>
+<span class="normal"><a href="#__codelineno-0-105">105</a></span>
+<span class="normal"><a href="#__codelineno-0-106">106</a></span>
+<span class="normal"><a href="#__codelineno-0-107">107</a></span>
+<span class="normal"><a href="#__codelineno-0-108">108</a></span>
+<span class="normal"><a href="#__codelineno-0-109">109</a></span>
+<span class="normal"><a href="#__codelineno-0-110">110</a></span>
+<span class="normal"><a href="#__codelineno-0-111">111</a></span>
+<span class="normal"><a href="#__codelineno-0-112">112</a></span>
+<span class="normal"><a href="#__codelineno-0-113">113</a></span>
+<span class="normal"><a href="#__codelineno-0-114">114</a></span>
+<span class="normal"><a href="#__codelineno-0-115">115</a></span>
+<span class="normal"><a href="#__codelineno-0-116">116</a></span>
+<span class="normal"><a href="#__codelineno-0-117">117</a></span>
+<span class="normal"><a href="#__codelineno-0-118">118</a></span>
+<span class="normal"><a href="#__codelineno-0-119">119</a></span>
+<span class="normal"><a href="#__codelineno-0-120">120</a></span>
+<span class="normal"><a href="#__codelineno-0-121">121</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-71" name="__codelineno-0-71"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_sensor_locations</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">origem</span><span class="p">,</span> <span class="n">aresta_consulta_label</span><span class="p">):</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="sd">    Identifica a aresta mais a montante (mais proxima da fonte) dentro do caminho</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="sd">    onde a aresta informada esta contida. Por caminho, define-se como os trechos</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="sd">    compreendidos em que suas extremidades sao uma barra que possui uma derivacao</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="sd">    e barra terminal, ou extremidades em que as barras possuem derivacao</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a><span class="sd">    Nota: Esta funcao tem uma complexidade elevada e pode ser lenta para grafos grandes,</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="sd">          pois gera todos os caminhos a partir de nos de derivacao.</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a><span class="sd">    Parametros:</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="sd">        G (nx.DiGraph): O grafo direcionado da rede.</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a><span class="sd">        origem (str): O no de referência (raiz do sistema, ex: &#39;800&#39;).</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a><span class="sd">        aresta_consulta_label (str): O nome (label) da aresta para a qual se quer encontrar o sensor.</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a>
+<a id="__codelineno-0-86" name="__codelineno-0-86"></a><span class="sd">    Retorna:</span>
+<a id="__codelineno-0-87" name="__codelineno-0-87"></a><span class="sd">        tuple: Uma tupla (aresta_montante, label_montante) ou None se nao encontrada.</span>
+<a id="__codelineno-0-88" name="__codelineno-0-88"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-89" name="__codelineno-0-89"></a>    <span class="c1"># 1. Encontrar a aresta correspondente ao label informado</span>
+<a id="__codelineno-0-90" name="__codelineno-0-90"></a>    <span class="n">aresta_consulta</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-91" name="__codelineno-0-91"></a>    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<a id="__codelineno-0-92" name="__codelineno-0-92"></a>        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">aresta_consulta_label</span><span class="p">:</span>
+<a id="__codelineno-0-93" name="__codelineno-0-93"></a>            <span class="n">aresta_consulta</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<a id="__codelineno-0-94" name="__codelineno-0-94"></a>            <span class="k">break</span>
+<a id="__codelineno-0-95" name="__codelineno-0-95"></a>
+<a id="__codelineno-0-96" name="__codelineno-0-96"></a>    <span class="k">if</span> <span class="n">aresta_consulta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-97" name="__codelineno-0-97"></a>        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Se o label nao existir no grafo</span>
+<a id="__codelineno-0-98" name="__codelineno-0-98"></a>
+<a id="__codelineno-0-99" name="__codelineno-0-99"></a>    <span class="c1"># 2. Encontrar todos os caminhos conectados no grafo</span>
+<a id="__codelineno-0-100" name="__codelineno-0-100"></a>    <span class="n">caminhos</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-101" name="__codelineno-0-101"></a>    <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+<a id="__codelineno-0-102" name="__codelineno-0-102"></a>        <span class="n">vizinhos</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">successors</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+<a id="__codelineno-0-103" name="__codelineno-0-103"></a>
+<a id="__codelineno-0-104" name="__codelineno-0-104"></a>        <span class="c1"># Se um no tiver mais de um sucessor, ele e uma derivacao</span>
+<a id="__codelineno-0-105" name="__codelineno-0-105"></a>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">vizinhos</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">u</span> <span class="o">==</span> <span class="n">origem</span><span class="p">:</span>
+<a id="__codelineno-0-106" name="__codelineno-0-106"></a>            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vizinhos</span><span class="p">:</span>
+<a id="__codelineno-0-107" name="__codelineno-0-107"></a>                <span class="n">caminho</span> <span class="o">=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)]</span>
+<a id="__codelineno-0-108" name="__codelineno-0-108"></a>                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">successors</span><span class="p">(</span><span class="n">v</span><span class="p">)))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># Continua ate encontrar derivacao ou extremidade</span>
+<a id="__codelineno-0-109" name="__codelineno-0-109"></a>                    <span class="n">prox</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">successors</span><span class="p">(</span><span class="n">v</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-110" name="__codelineno-0-110"></a>                    <span class="n">caminho</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">prox</span><span class="p">))</span>
+<a id="__codelineno-0-111" name="__codelineno-0-111"></a>                    <span class="n">v</span> <span class="o">=</span> <span class="n">prox</span>
+<a id="__codelineno-0-112" name="__codelineno-0-112"></a>                <span class="n">caminhos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">caminho</span><span class="p">)</span>
+<a id="__codelineno-0-113" name="__codelineno-0-113"></a>
+<a id="__codelineno-0-114" name="__codelineno-0-114"></a>    <span class="c1"># 3. Identificar em qual caminho esta a aresta informada</span>
+<a id="__codelineno-0-115" name="__codelineno-0-115"></a>    <span class="k">for</span> <span class="n">caminho</span> <span class="ow">in</span> <span class="n">caminhos</span><span class="p">:</span>
+<a id="__codelineno-0-116" name="__codelineno-0-116"></a>        <span class="k">if</span> <span class="n">aresta_consulta</span> <span class="ow">in</span> <span class="n">caminho</span><span class="p">:</span>
+<a id="__codelineno-0-117" name="__codelineno-0-117"></a>            <span class="n">aresta_montante</span> <span class="o">=</span> <span class="n">caminho</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-118" name="__codelineno-0-118"></a>            <span class="n">label_montante</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="n">aresta_montante</span><span class="p">][</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+<a id="__codelineno-0-119" name="__codelineno-0-119"></a>            <span class="k">return</span> <span class="n">aresta_montante</span><span class="p">,</span> <span class="n">label_montante</span>
+<a id="__codelineno-0-120" name="__codelineno-0-120"></a>
+<a id="__codelineno-0-121" name="__codelineno-0-121"></a>    <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Se nao encontrar um caminho correspondente</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.lista_sensores_fc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">lista_sensores_fc</span><span class="p">(</span><span class="n">g</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Gera uma lista de 'sensores' unicos para o alimentador.</p>
+<p>Um 'sensor' e definido como a primeira linha de um ramal principal. Esta funcao
+itera sobre todas as linhas do grafo e usa get_sensor_locations para encontrar
+a linha "mae" de cada uma, compilando uma lista sem duplicatas.</p>
+
+
+<details class="parametros" open>
+  <summary>Parametros</summary>
+  <p>G (nx.DiGraph): O grafo da rede.</p>
+</details>
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>list: Uma lista de strings com os nomes (labels) unicos dos sensores.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-123">123</a></span>
+<span class="normal"><a href="#__codelineno-0-124">124</a></span>
+<span class="normal"><a href="#__codelineno-0-125">125</a></span>
+<span class="normal"><a href="#__codelineno-0-126">126</a></span>
+<span class="normal"><a href="#__codelineno-0-127">127</a></span>
+<span class="normal"><a href="#__codelineno-0-128">128</a></span>
+<span class="normal"><a href="#__codelineno-0-129">129</a></span>
+<span class="normal"><a href="#__codelineno-0-130">130</a></span>
+<span class="normal"><a href="#__codelineno-0-131">131</a></span>
+<span class="normal"><a href="#__codelineno-0-132">132</a></span>
+<span class="normal"><a href="#__codelineno-0-133">133</a></span>
+<span class="normal"><a href="#__codelineno-0-134">134</a></span>
+<span class="normal"><a href="#__codelineno-0-135">135</a></span>
+<span class="normal"><a href="#__codelineno-0-136">136</a></span>
+<span class="normal"><a href="#__codelineno-0-137">137</a></span>
+<span class="normal"><a href="#__codelineno-0-138">138</a></span>
+<span class="normal"><a href="#__codelineno-0-139">139</a></span>
+<span class="normal"><a href="#__codelineno-0-140">140</a></span>
+<span class="normal"><a href="#__codelineno-0-141">141</a></span>
+<span class="normal"><a href="#__codelineno-0-142">142</a></span>
+<span class="normal"><a href="#__codelineno-0-143">143</a></span>
+<span class="normal"><a href="#__codelineno-0-144">144</a></span>
+<span class="normal"><a href="#__codelineno-0-145">145</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-123" name="__codelineno-0-123"></a><span class="k">def</span><span class="w"> </span><span class="nf">lista_sensores_fc</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+<a id="__codelineno-0-124" name="__codelineno-0-124"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-125" name="__codelineno-0-125"></a><span class="sd">        Gera uma lista de &#39;sensores&#39; unicos para o alimentador.</span>
+<a id="__codelineno-0-126" name="__codelineno-0-126"></a>
+<a id="__codelineno-0-127" name="__codelineno-0-127"></a><span class="sd">        Um &#39;sensor&#39; e definido como a primeira linha de um ramal principal. Esta funcao</span>
+<a id="__codelineno-0-128" name="__codelineno-0-128"></a><span class="sd">        itera sobre todas as linhas do grafo e usa get_sensor_locations para encontrar</span>
+<a id="__codelineno-0-129" name="__codelineno-0-129"></a><span class="sd">        a linha &quot;mae&quot; de cada uma, compilando uma lista sem duplicatas.</span>
+<a id="__codelineno-0-130" name="__codelineno-0-130"></a>
+<a id="__codelineno-0-131" name="__codelineno-0-131"></a><span class="sd">        Parametros:</span>
+<a id="__codelineno-0-132" name="__codelineno-0-132"></a><span class="sd">            G (nx.DiGraph): O grafo da rede.</span>
+<a id="__codelineno-0-133" name="__codelineno-0-133"></a>
+<a id="__codelineno-0-134" name="__codelineno-0-134"></a><span class="sd">        Retorna:</span>
+<a id="__codelineno-0-135" name="__codelineno-0-135"></a><span class="sd">            list: Uma lista de strings com os nomes (labels) unicos dos sensores.</span>
+<a id="__codelineno-0-136" name="__codelineno-0-136"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-137" name="__codelineno-0-137"></a>
+<a id="__codelineno-0-138" name="__codelineno-0-138"></a>    <span class="n">lista_sensores</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-139" name="__codelineno-0-139"></a>
+<a id="__codelineno-0-140" name="__codelineno-0-140"></a>    <span class="k">for</span> <span class="n">linha</span> <span class="ow">in</span> <span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">g</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)]:</span>
+<a id="__codelineno-0-141" name="__codelineno-0-141"></a>        <span class="n">_</span><span class="p">,</span> <span class="n">sensor_label</span> <span class="o">=</span> <span class="n">get_sensor_locations</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="s1">&#39;800&#39;</span><span class="p">,</span> <span class="n">linha</span><span class="p">)</span>
+<a id="__codelineno-0-142" name="__codelineno-0-142"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">sensor_label</span> <span class="ow">in</span> <span class="n">lista_sensores</span><span class="p">:</span>
+<a id="__codelineno-0-143" name="__codelineno-0-143"></a>            <span class="n">lista_sensores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sensor_label</span><span class="p">)</span>
+<a id="__codelineno-0-144" name="__codelineno-0-144"></a>
+<a id="__codelineno-0-145" name="__codelineno-0-145"></a>    <span class="k">return</span> <span class="n">lista_sensores</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.measurement_dict_fc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">measurement_dict_fc</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Cria e retorna um dicionario modelo (template) para armazenar os resultados da simulacao.</p>
+<p>As chaves sao pre-definidas para armazenar tensoes, correntes, dados da falta e
+medicoes dos sensores. Cada valor e uma lista vazia, pronta para ser preenchida.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-147">147</a></span>
+<span class="normal"><a href="#__codelineno-0-148">148</a></span>
+<span class="normal"><a href="#__codelineno-0-149">149</a></span>
+<span class="normal"><a href="#__codelineno-0-150">150</a></span>
+<span class="normal"><a href="#__codelineno-0-151">151</a></span>
+<span class="normal"><a href="#__codelineno-0-152">152</a></span>
+<span class="normal"><a href="#__codelineno-0-153">153</a></span>
+<span class="normal"><a href="#__codelineno-0-154">154</a></span>
+<span class="normal"><a href="#__codelineno-0-155">155</a></span>
+<span class="normal"><a href="#__codelineno-0-156">156</a></span>
+<span class="normal"><a href="#__codelineno-0-157">157</a></span>
+<span class="normal"><a href="#__codelineno-0-158">158</a></span>
+<span class="normal"><a href="#__codelineno-0-159">159</a></span>
+<span class="normal"><a href="#__codelineno-0-160">160</a></span>
+<span class="normal"><a href="#__codelineno-0-161">161</a></span>
+<span class="normal"><a href="#__codelineno-0-162">162</a></span>
+<span class="normal"><a href="#__codelineno-0-163">163</a></span>
+<span class="normal"><a href="#__codelineno-0-164">164</a></span>
+<span class="normal"><a href="#__codelineno-0-165">165</a></span>
+<span class="normal"><a href="#__codelineno-0-166">166</a></span>
+<span class="normal"><a href="#__codelineno-0-167">167</a></span>
+<span class="normal"><a href="#__codelineno-0-168">168</a></span>
+<span class="normal"><a href="#__codelineno-0-169">169</a></span>
+<span class="normal"><a href="#__codelineno-0-170">170</a></span>
+<span class="normal"><a href="#__codelineno-0-171">171</a></span>
+<span class="normal"><a href="#__codelineno-0-172">172</a></span>
+<span class="normal"><a href="#__codelineno-0-173">173</a></span>
+<span class="normal"><a href="#__codelineno-0-174">174</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-147" name="__codelineno-0-147"></a><span class="k">def</span><span class="w"> </span><span class="nf">measurement_dict_fc</span><span class="p">():</span>
+<a id="__codelineno-0-148" name="__codelineno-0-148"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-149" name="__codelineno-0-149"></a><span class="sd">        Cria e retorna um dicionario modelo (template) para armazenar os resultados da simulacao.</span>
+<a id="__codelineno-0-150" name="__codelineno-0-150"></a>
+<a id="__codelineno-0-151" name="__codelineno-0-151"></a><span class="sd">        As chaves sao pre-definidas para armazenar tensoes, correntes, dados da falta e</span>
+<a id="__codelineno-0-152" name="__codelineno-0-152"></a><span class="sd">        medicoes dos sensores. Cada valor e uma lista vazia, pronta para ser preenchida.</span>
+<a id="__codelineno-0-153" name="__codelineno-0-153"></a>
+<a id="__codelineno-0-154" name="__codelineno-0-154"></a><span class="sd">        &quot;&quot;&quot;</span>
+<a id="__codelineno-0-155" name="__codelineno-0-155"></a>
+<a id="__codelineno-0-156" name="__codelineno-0-156"></a>    <span class="n">measurement_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-0-157" name="__codelineno-0-157"></a>
+<a id="__codelineno-0-158" name="__codelineno-0-158"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-159" name="__codelineno-0-159"></a>        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-160" name="__codelineno-0-160"></a>            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-161" name="__codelineno-0-161"></a>                <span class="n">measurement_dict</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}{</span><span class="n">j</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-162" name="__codelineno-0-162"></a>
+<a id="__codelineno-0-163" name="__codelineno-0-163"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;linha_faltosa&#39;</span><span class="p">,</span> <span class="s1">&#39;distancia&#39;</span><span class="p">,</span> <span class="s1">&#39;tipo&#39;</span><span class="p">,</span> <span class="s1">&#39;r_f&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-164" name="__codelineno-0-164"></a>        <span class="n">measurement_dict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-165" name="__codelineno-0-165"></a>
+<a id="__codelineno-0-166" name="__codelineno-0-166"></a>    <span class="n">g</span> <span class="o">=</span> <span class="n">create_network_graph</span><span class="p">()</span>
+<a id="__codelineno-0-167" name="__codelineno-0-167"></a>
+<a id="__codelineno-0-168" name="__codelineno-0-168"></a>    <span class="n">lista_sensores</span> <span class="o">=</span> <span class="n">lista_sensores_fc</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+<a id="__codelineno-0-169" name="__codelineno-0-169"></a>
+<a id="__codelineno-0-170" name="__codelineno-0-170"></a>    <span class="k">for</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">lista_sensores</span><span class="p">:</span>
+<a id="__codelineno-0-171" name="__codelineno-0-171"></a>        <span class="k">for</span> <span class="n">fase</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]:</span>
+<a id="__codelineno-0-172" name="__codelineno-0-172"></a>            <span class="n">measurement_dict</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sensor</span><span class="si">}</span><span class="s1">_i</span><span class="si">{</span><span class="n">fase</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-0-173" name="__codelineno-0-173"></a>
+<a id="__codelineno-0-174" name="__codelineno-0-174"></a>    <span class="k">return</span> <span class="n">measurement_dict</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.parametro_de_falta" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">parametro_de_falta</span><span class="p">(</span><span class="n">type_fault</span><span class="p">,</span> <span class="n">available_phases</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Retorna os parametros de uma falta (bus1, bus2, num_phases) se ela for aplicavel
+às fases disponiveis na linha.</p>
+<p>Utiliza um dicionario de configuracao para mapear uma chave de falta (ex: 'at')
+aos seus parametros no OpenDSS.</p>
+
+
+<details class="parametros" open>
+  <summary>Parametros</summary>
+  <p>type_fault (str): A chave que identifica o tipo de falta (ex: "at", "bct").
+available_phases (list): Lista de strings com as fases disponiveis (ex: ['1', '2', '3']).</p>
+</details>
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>tuple: Uma tupla com (bus1, bus2, num_phases) se a falta for valida, ou None caso contrario.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-228">228</a></span>
+<span class="normal"><a href="#__codelineno-0-229">229</a></span>
+<span class="normal"><a href="#__codelineno-0-230">230</a></span>
+<span class="normal"><a href="#__codelineno-0-231">231</a></span>
+<span class="normal"><a href="#__codelineno-0-232">232</a></span>
+<span class="normal"><a href="#__codelineno-0-233">233</a></span>
+<span class="normal"><a href="#__codelineno-0-234">234</a></span>
+<span class="normal"><a href="#__codelineno-0-235">235</a></span>
+<span class="normal"><a href="#__codelineno-0-236">236</a></span>
+<span class="normal"><a href="#__codelineno-0-237">237</a></span>
+<span class="normal"><a href="#__codelineno-0-238">238</a></span>
+<span class="normal"><a href="#__codelineno-0-239">239</a></span>
+<span class="normal"><a href="#__codelineno-0-240">240</a></span>
+<span class="normal"><a href="#__codelineno-0-241">241</a></span>
+<span class="normal"><a href="#__codelineno-0-242">242</a></span>
+<span class="normal"><a href="#__codelineno-0-243">243</a></span>
+<span class="normal"><a href="#__codelineno-0-244">244</a></span>
+<span class="normal"><a href="#__codelineno-0-245">245</a></span>
+<span class="normal"><a href="#__codelineno-0-246">246</a></span>
+<span class="normal"><a href="#__codelineno-0-247">247</a></span>
+<span class="normal"><a href="#__codelineno-0-248">248</a></span>
+<span class="normal"><a href="#__codelineno-0-249">249</a></span>
+<span class="normal"><a href="#__codelineno-0-250">250</a></span>
+<span class="normal"><a href="#__codelineno-0-251">251</a></span>
+<span class="normal"><a href="#__codelineno-0-252">252</a></span>
+<span class="normal"><a href="#__codelineno-0-253">253</a></span>
+<span class="normal"><a href="#__codelineno-0-254">254</a></span>
+<span class="normal"><a href="#__codelineno-0-255">255</a></span>
+<span class="normal"><a href="#__codelineno-0-256">256</a></span>
+<span class="normal"><a href="#__codelineno-0-257">257</a></span>
+<span class="normal"><a href="#__codelineno-0-258">258</a></span>
+<span class="normal"><a href="#__codelineno-0-259">259</a></span>
+<span class="normal"><a href="#__codelineno-0-260">260</a></span>
+<span class="normal"><a href="#__codelineno-0-261">261</a></span>
+<span class="normal"><a href="#__codelineno-0-262">262</a></span>
+<span class="normal"><a href="#__codelineno-0-263">263</a></span>
+<span class="normal"><a href="#__codelineno-0-264">264</a></span>
+<span class="normal"><a href="#__codelineno-0-265">265</a></span>
+<span class="normal"><a href="#__codelineno-0-266">266</a></span>
+<span class="normal"><a href="#__codelineno-0-267">267</a></span>
+<span class="normal"><a href="#__codelineno-0-268">268</a></span>
+<span class="normal"><a href="#__codelineno-0-269">269</a></span>
+<span class="normal"><a href="#__codelineno-0-270">270</a></span>
+<span class="normal"><a href="#__codelineno-0-271">271</a></span>
+<span class="normal"><a href="#__codelineno-0-272">272</a></span>
+<span class="normal"><a href="#__codelineno-0-273">273</a></span>
+<span class="normal"><a href="#__codelineno-0-274">274</a></span>
+<span class="normal"><a href="#__codelineno-0-275">275</a></span>
+<span class="normal"><a href="#__codelineno-0-276">276</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-228" name="__codelineno-0-228"></a><span class="k">def</span><span class="w"> </span><span class="nf">parametro_de_falta</span><span class="p">(</span><span class="n">type_fault</span><span class="p">,</span> <span class="n">available_phases</span><span class="p">):</span>
+<a id="__codelineno-0-229" name="__codelineno-0-229"></a>
+<a id="__codelineno-0-230" name="__codelineno-0-230"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-231" name="__codelineno-0-231"></a><span class="sd">       Retorna os parametros de uma falta (bus1, bus2, num_phases) se ela for aplicavel</span>
+<a id="__codelineno-0-232" name="__codelineno-0-232"></a><span class="sd">       às fases disponiveis na linha.</span>
+<a id="__codelineno-0-233" name="__codelineno-0-233"></a>
+<a id="__codelineno-0-234" name="__codelineno-0-234"></a><span class="sd">       Utiliza um dicionario de configuracao para mapear uma chave de falta (ex: &#39;at&#39;)</span>
+<a id="__codelineno-0-235" name="__codelineno-0-235"></a><span class="sd">       aos seus parametros no OpenDSS.</span>
+<a id="__codelineno-0-236" name="__codelineno-0-236"></a>
+<a id="__codelineno-0-237" name="__codelineno-0-237"></a><span class="sd">       Parametros:</span>
+<a id="__codelineno-0-238" name="__codelineno-0-238"></a><span class="sd">           type_fault (str): A chave que identifica o tipo de falta (ex: &quot;at&quot;, &quot;bct&quot;).</span>
+<a id="__codelineno-0-239" name="__codelineno-0-239"></a><span class="sd">           available_phases (list): Lista de strings com as fases disponiveis (ex: [&#39;1&#39;, &#39;2&#39;, &#39;3&#39;]).</span>
+<a id="__codelineno-0-240" name="__codelineno-0-240"></a>
+<a id="__codelineno-0-241" name="__codelineno-0-241"></a><span class="sd">       Retorna:</span>
+<a id="__codelineno-0-242" name="__codelineno-0-242"></a><span class="sd">           tuple: Uma tupla com (bus1, bus2, num_phases) se a falta for valida, ou None caso contrario.</span>
+<a id="__codelineno-0-243" name="__codelineno-0-243"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-244" name="__codelineno-0-244"></a>
+<a id="__codelineno-0-245" name="__codelineno-0-245"></a>    <span class="n">fault_config</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-0-246" name="__codelineno-0-246"></a>        <span class="c1"># ... (seu dicionario fault_config aqui, igual ao anterior) ...</span>
+<a id="__codelineno-0-247" name="__codelineno-0-247"></a>        <span class="s2">&quot;at&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.1&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-248" name="__codelineno-0-248"></a>        <span class="s2">&quot;bt&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.2&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-249" name="__codelineno-0-249"></a>        <span class="s2">&quot;ct&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;3&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.3&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-250" name="__codelineno-0-250"></a>        <span class="s2">&quot;abt&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.1.2&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-251" name="__codelineno-0-251"></a>        <span class="s2">&quot;bct&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.2.3&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-252" name="__codelineno-0-252"></a>        <span class="s2">&quot;act&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.1.3&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-253" name="__codelineno-0-253"></a>        <span class="s2">&quot;ab&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.1&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.2&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-254" name="__codelineno-0-254"></a>        <span class="s2">&quot;bc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.2&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.3&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-255" name="__codelineno-0-255"></a>        <span class="s2">&quot;ac&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.1&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.3&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-256" name="__codelineno-0-256"></a>        <span class="s2">&quot;abc&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;phases_needed&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span> <span class="s2">&quot;bus1&quot;</span><span class="p">:</span> <span class="s2">&quot;.1.2.3&quot;</span><span class="p">,</span> <span class="s2">&quot;bus2&quot;</span><span class="p">:</span> <span class="s2">&quot;.0&quot;</span><span class="p">,</span> <span class="s2">&quot;num_phases&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">},</span>
+<a id="__codelineno-0-257" name="__codelineno-0-257"></a>    <span class="p">}</span>
+<a id="__codelineno-0-258" name="__codelineno-0-258"></a>
+<a id="__codelineno-0-259" name="__codelineno-0-259"></a>    <span class="c1"># Melhoria 1: Usar .get() para evitar erro se a &#39;type_fault&#39; nao existir</span>
+<a id="__codelineno-0-260" name="__codelineno-0-260"></a>    <span class="n">config</span> <span class="o">=</span> <span class="n">fault_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">type_fault</span><span class="p">)</span>
+<a id="__codelineno-0-261" name="__codelineno-0-261"></a>
+<a id="__codelineno-0-262" name="__codelineno-0-262"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+<a id="__codelineno-0-263" name="__codelineno-0-263"></a>        <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Retorna None se o tipo de falta for invalido</span>
+<a id="__codelineno-0-264" name="__codelineno-0-264"></a>
+<a id="__codelineno-0-265" name="__codelineno-0-265"></a>    <span class="c1"># Melhoria 2: Corrigido o bug. Você precisa pegar a lista de &#39;phases_needed&#39;</span>
+<a id="__codelineno-0-266" name="__codelineno-0-266"></a>    <span class="n">required</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;phases_needed&#39;</span><span class="p">])</span>
+<a id="__codelineno-0-267" name="__codelineno-0-267"></a>    <span class="n">available</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">available_phases</span><span class="p">)</span>
+<a id="__codelineno-0-268" name="__codelineno-0-268"></a>
+<a id="__codelineno-0-269" name="__codelineno-0-269"></a>    <span class="k">if</span> <span class="n">required</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="n">available</span><span class="p">):</span>
+<a id="__codelineno-0-270" name="__codelineno-0-270"></a>        <span class="c1"># Se o IF for atendido, retorna a lista com os parametros</span>
+<a id="__codelineno-0-271" name="__codelineno-0-271"></a>        <span class="k">return</span> <span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;bus1&#39;</span><span class="p">],</span>
+<a id="__codelineno-0-272" name="__codelineno-0-272"></a>                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;bus2&#39;</span><span class="p">],</span>
+<a id="__codelineno-0-273" name="__codelineno-0-273"></a>                <span class="n">config</span><span class="p">[</span><span class="s1">&#39;num_phases&#39;</span><span class="p">]]</span>
+<a id="__codelineno-0-274" name="__codelineno-0-274"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-275" name="__codelineno-0-275"></a>        <span class="c1"># Se o IF NAO for atendido, retorna None</span>
+<a id="__codelineno-0-276" name="__codelineno-0-276"></a>        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.processamento" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">processamento</span><span class="p">(</span><span class="n">dss</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Realiza um pre-processamento de todos os elementos 'Line' do circuito OpenDSS,
+extraindo seus parametros e calculando suas matrizes de impedancia.</p>
+
+
+<details class="parametros" open>
+  <summary>Parametros</summary>
+  <p>dss (py_dss_interface.DSS): A instancia do objeto DSS.</p>
+</details>
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>dict: Um dicionario aninhado onde cada chave e o nome de uma linha e o valor
+      e outro dicionario com os parametros daquela linha.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-177">177</a></span>
+<span class="normal"><a href="#__codelineno-0-178">178</a></span>
+<span class="normal"><a href="#__codelineno-0-179">179</a></span>
+<span class="normal"><a href="#__codelineno-0-180">180</a></span>
+<span class="normal"><a href="#__codelineno-0-181">181</a></span>
+<span class="normal"><a href="#__codelineno-0-182">182</a></span>
+<span class="normal"><a href="#__codelineno-0-183">183</a></span>
+<span class="normal"><a href="#__codelineno-0-184">184</a></span>
+<span class="normal"><a href="#__codelineno-0-185">185</a></span>
+<span class="normal"><a href="#__codelineno-0-186">186</a></span>
+<span class="normal"><a href="#__codelineno-0-187">187</a></span>
+<span class="normal"><a href="#__codelineno-0-188">188</a></span>
+<span class="normal"><a href="#__codelineno-0-189">189</a></span>
+<span class="normal"><a href="#__codelineno-0-190">190</a></span>
+<span class="normal"><a href="#__codelineno-0-191">191</a></span>
+<span class="normal"><a href="#__codelineno-0-192">192</a></span>
+<span class="normal"><a href="#__codelineno-0-193">193</a></span>
+<span class="normal"><a href="#__codelineno-0-194">194</a></span>
+<span class="normal"><a href="#__codelineno-0-195">195</a></span>
+<span class="normal"><a href="#__codelineno-0-196">196</a></span>
+<span class="normal"><a href="#__codelineno-0-197">197</a></span>
+<span class="normal"><a href="#__codelineno-0-198">198</a></span>
+<span class="normal"><a href="#__codelineno-0-199">199</a></span>
+<span class="normal"><a href="#__codelineno-0-200">200</a></span>
+<span class="normal"><a href="#__codelineno-0-201">201</a></span>
+<span class="normal"><a href="#__codelineno-0-202">202</a></span>
+<span class="normal"><a href="#__codelineno-0-203">203</a></span>
+<span class="normal"><a href="#__codelineno-0-204">204</a></span>
+<span class="normal"><a href="#__codelineno-0-205">205</a></span>
+<span class="normal"><a href="#__codelineno-0-206">206</a></span>
+<span class="normal"><a href="#__codelineno-0-207">207</a></span>
+<span class="normal"><a href="#__codelineno-0-208">208</a></span>
+<span class="normal"><a href="#__codelineno-0-209">209</a></span>
+<span class="normal"><a href="#__codelineno-0-210">210</a></span>
+<span class="normal"><a href="#__codelineno-0-211">211</a></span>
+<span class="normal"><a href="#__codelineno-0-212">212</a></span>
+<span class="normal"><a href="#__codelineno-0-213">213</a></span>
+<span class="normal"><a href="#__codelineno-0-214">214</a></span>
+<span class="normal"><a href="#__codelineno-0-215">215</a></span>
+<span class="normal"><a href="#__codelineno-0-216">216</a></span>
+<span class="normal"><a href="#__codelineno-0-217">217</a></span>
+<span class="normal"><a href="#__codelineno-0-218">218</a></span>
+<span class="normal"><a href="#__codelineno-0-219">219</a></span>
+<span class="normal"><a href="#__codelineno-0-220">220</a></span>
+<span class="normal"><a href="#__codelineno-0-221">221</a></span>
+<span class="normal"><a href="#__codelineno-0-222">222</a></span>
+<span class="normal"><a href="#__codelineno-0-223">223</a></span>
+<span class="normal"><a href="#__codelineno-0-224">224</a></span>
+<span class="normal"><a href="#__codelineno-0-225">225</a></span>
+<span class="normal"><a href="#__codelineno-0-226">226</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-177" name="__codelineno-0-177"></a><span class="k">def</span><span class="w"> </span><span class="nf">processamento</span><span class="p">(</span><span class="n">dss</span><span class="p">):</span>
+<a id="__codelineno-0-178" name="__codelineno-0-178"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-179" name="__codelineno-0-179"></a><span class="sd">        Realiza um pre-processamento de todos os elementos &#39;Line&#39; do circuito OpenDSS,</span>
+<a id="__codelineno-0-180" name="__codelineno-0-180"></a><span class="sd">        extraindo seus parametros e calculando suas matrizes de impedancia.</span>
+<a id="__codelineno-0-181" name="__codelineno-0-181"></a>
+<a id="__codelineno-0-182" name="__codelineno-0-182"></a><span class="sd">        Parametros:</span>
+<a id="__codelineno-0-183" name="__codelineno-0-183"></a><span class="sd">            dss (py_dss_interface.DSS): A instancia do objeto DSS.</span>
+<a id="__codelineno-0-184" name="__codelineno-0-184"></a>
+<a id="__codelineno-0-185" name="__codelineno-0-185"></a><span class="sd">        Retorna:</span>
+<a id="__codelineno-0-186" name="__codelineno-0-186"></a><span class="sd">            dict: Um dicionario aninhado onde cada chave e o nome de uma linha e o valor</span>
+<a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="sd">                  e outro dicionario com os parametros daquela linha.</span>
+<a id="__codelineno-0-188" name="__codelineno-0-188"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-189" name="__codelineno-0-189"></a>
+<a id="__codelineno-0-190" name="__codelineno-0-190"></a>    <span class="n">processamento_data</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-0-191" name="__codelineno-0-191"></a>
+<a id="__codelineno-0-192" name="__codelineno-0-192"></a>    <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<a id="__codelineno-0-193" name="__codelineno-0-193"></a>    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">count</span><span class="p">):</span>
+<a id="__codelineno-0-194" name="__codelineno-0-194"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<a id="__codelineno-0-195" name="__codelineno-0-195"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;linecode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">linecode</span>
+<a id="__codelineno-0-196" name="__codelineno-0-196"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">length</span>
+<a id="__codelineno-0-197" name="__codelineno-0-197"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;num_phases&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">phases</span>
+<a id="__codelineno-0-198" name="__codelineno-0-198"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;bus1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">bus1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-199" name="__codelineno-0-199"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;bus2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">bus2</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-200" name="__codelineno-0-200"></a>        <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;phases&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">bus1</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">][:</span><span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;num_phases&#39;</span><span class="p">]]</span>
+<a id="__codelineno-0-201" name="__codelineno-0-201"></a>
+<a id="__codelineno-0-202" name="__codelineno-0-202"></a>        <span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+<a id="__codelineno-0-203" name="__codelineno-0-203"></a>        <span class="k">for</span> <span class="n">__</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">count</span><span class="p">):</span>
+<a id="__codelineno-0-204" name="__codelineno-0-204"></a>            <span class="k">if</span> <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">linecode</span> <span class="o">==</span> <span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+<a id="__codelineno-0-205" name="__codelineno-0-205"></a>                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">rmatrix</span><span class="p">)</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+<a id="__codelineno-0-206" name="__codelineno-0-206"></a>                    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">rmatrix</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-0-207" name="__codelineno-0-207"></a>                    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">xmatrix</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<a id="__codelineno-0-208" name="__codelineno-0-208"></a>
+<a id="__codelineno-0-209" name="__codelineno-0-209"></a>                    <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;zmatrix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">x</span>
+<a id="__codelineno-0-210" name="__codelineno-0-210"></a>
+<a id="__codelineno-0-211" name="__codelineno-0-211"></a>                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">rmatrix</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-0-212" name="__codelineno-0-212"></a>                    <span class="n">phase_map</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<a id="__codelineno-0-213" name="__codelineno-0-213"></a>
+<a id="__codelineno-0-214" name="__codelineno-0-214"></a>                    <span class="n">indice_fase</span> <span class="o">=</span> <span class="n">phase_map</span><span class="p">[</span><span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;phases&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+<a id="__codelineno-0-215" name="__codelineno-0-215"></a>                    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<a id="__codelineno-0-216" name="__codelineno-0-216"></a>                    <span class="n">r</span><span class="p">[</span><span class="n">indice_fase</span><span class="p">,</span> <span class="n">indice_fase</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">rmatrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-217" name="__codelineno-0-217"></a>                    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<a id="__codelineno-0-218" name="__codelineno-0-218"></a>                    <span class="n">x</span><span class="p">[</span><span class="n">indice_fase</span><span class="p">,</span> <span class="n">indice_fase</span><span class="p">]</span> <span class="o">=</span> <span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">xmatrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<a id="__codelineno-0-219" name="__codelineno-0-219"></a>
+<a id="__codelineno-0-220" name="__codelineno-0-220"></a>                    <span class="n">processamento_data</span><span class="p">[</span><span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;zmatrix&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">x</span>
+<a id="__codelineno-0-221" name="__codelineno-0-221"></a>
+<a id="__codelineno-0-222" name="__codelineno-0-222"></a>            <span class="n">dss</span><span class="o">.</span><span class="n">linecodes</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>        
+<a id="__codelineno-0-223" name="__codelineno-0-223"></a>        <span class="n">dss</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+<a id="__codelineno-0-224" name="__codelineno-0-224"></a>
+<a id="__codelineno-0-225" name="__codelineno-0-225"></a>
+<a id="__codelineno-0-226" name="__codelineno-0-226"></a>    <span class="k">return</span> <span class="n">processamento_data</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="src.funcoes.reatancia_calc" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">reatancia_calc</span><span class="p">(</span><span class="n">tipo_falta</span><span class="p">,</span> <span class="n">v_f</span><span class="p">,</span> <span class="n">i_f</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Calcula a reatancia aparente no ponto de falta com base no tipo de falta.</p>
+
+
+<details class="parametros" open>
+  <summary>Parametros</summary>
+  <p>tipo_falta (str): String que descreve os nos da falta (ex: '.1.0', '.1.2').
+Vf (np.ndarray): Vetor de tensoes complexas no ponto de falta.
+If (np.ndarray): Vetor de correntes complexas de falta.</p>
+</details>
+
+<details class="retorna" open>
+  <summary>Retorna</summary>
+  <p>float: O valor da reatancia calculada. Retorna 0.0 se o tipo for desconhecido.</p>
+</details>
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/funcoes.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-315">315</a></span>
+<span class="normal"><a href="#__codelineno-0-316">316</a></span>
+<span class="normal"><a href="#__codelineno-0-317">317</a></span>
+<span class="normal"><a href="#__codelineno-0-318">318</a></span>
+<span class="normal"><a href="#__codelineno-0-319">319</a></span>
+<span class="normal"><a href="#__codelineno-0-320">320</a></span>
+<span class="normal"><a href="#__codelineno-0-321">321</a></span>
+<span class="normal"><a href="#__codelineno-0-322">322</a></span>
+<span class="normal"><a href="#__codelineno-0-323">323</a></span>
+<span class="normal"><a href="#__codelineno-0-324">324</a></span>
+<span class="normal"><a href="#__codelineno-0-325">325</a></span>
+<span class="normal"><a href="#__codelineno-0-326">326</a></span>
+<span class="normal"><a href="#__codelineno-0-327">327</a></span>
+<span class="normal"><a href="#__codelineno-0-328">328</a></span>
+<span class="normal"><a href="#__codelineno-0-329">329</a></span>
+<span class="normal"><a href="#__codelineno-0-330">330</a></span>
+<span class="normal"><a href="#__codelineno-0-331">331</a></span>
+<span class="normal"><a href="#__codelineno-0-332">332</a></span>
+<span class="normal"><a href="#__codelineno-0-333">333</a></span>
+<span class="normal"><a href="#__codelineno-0-334">334</a></span>
+<span class="normal"><a href="#__codelineno-0-335">335</a></span>
+<span class="normal"><a href="#__codelineno-0-336">336</a></span>
+<span class="normal"><a href="#__codelineno-0-337">337</a></span>
+<span class="normal"><a href="#__codelineno-0-338">338</a></span>
+<span class="normal"><a href="#__codelineno-0-339">339</a></span>
+<span class="normal"><a href="#__codelineno-0-340">340</a></span>
+<span class="normal"><a href="#__codelineno-0-341">341</a></span>
+<span class="normal"><a href="#__codelineno-0-342">342</a></span>
+<span class="normal"><a href="#__codelineno-0-343">343</a></span>
+<span class="normal"><a href="#__codelineno-0-344">344</a></span>
+<span class="normal"><a href="#__codelineno-0-345">345</a></span>
+<span class="normal"><a href="#__codelineno-0-346">346</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-315" name="__codelineno-0-315"></a><span class="k">def</span><span class="w"> </span><span class="nf">reatancia_calc</span><span class="p">(</span><span class="n">tipo_falta</span><span class="p">,</span> <span class="n">v_f</span><span class="p">,</span> <span class="n">i_f</span><span class="p">):</span>
+<a id="__codelineno-0-316" name="__codelineno-0-316"></a>
+<a id="__codelineno-0-317" name="__codelineno-0-317"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-318" name="__codelineno-0-318"></a><span class="sd">        Calcula a reatancia aparente no ponto de falta com base no tipo de falta.</span>
+<a id="__codelineno-0-319" name="__codelineno-0-319"></a>
+<a id="__codelineno-0-320" name="__codelineno-0-320"></a><span class="sd">        Parametros:</span>
+<a id="__codelineno-0-321" name="__codelineno-0-321"></a><span class="sd">            tipo_falta (str): String que descreve os nos da falta (ex: &#39;.1.0&#39;, &#39;.1.2&#39;).</span>
+<a id="__codelineno-0-322" name="__codelineno-0-322"></a><span class="sd">            Vf (np.ndarray): Vetor de tensoes complexas no ponto de falta.</span>
+<a id="__codelineno-0-323" name="__codelineno-0-323"></a><span class="sd">            If (np.ndarray): Vetor de correntes complexas de falta.</span>
+<a id="__codelineno-0-324" name="__codelineno-0-324"></a>
+<a id="__codelineno-0-325" name="__codelineno-0-325"></a><span class="sd">        Retorna:</span>
+<a id="__codelineno-0-326" name="__codelineno-0-326"></a><span class="sd">            float: O valor da reatancia calculada. Retorna 0.0 se o tipo for desconhecido.</span>
+<a id="__codelineno-0-327" name="__codelineno-0-327"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-328" name="__codelineno-0-328"></a>
+<a id="__codelineno-0-329" name="__codelineno-0-329"></a>    <span class="n">xf</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a id="__codelineno-0-330" name="__codelineno-0-330"></a>
+<a id="__codelineno-0-331" name="__codelineno-0-331"></a>    <span class="k">if</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.1.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-332" name="__codelineno-0-332"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-333" name="__codelineno-0-333"></a>    <span class="k">elif</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.2.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-334" name="__codelineno-0-334"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-335" name="__codelineno-0-335"></a>    <span class="k">elif</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.3.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-336" name="__codelineno-0-336"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-337" name="__codelineno-0-337"></a>    <span class="k">elif</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.1.2&#39;</span><span class="p">,</span> <span class="s1">&#39;.1.2.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-338" name="__codelineno-0-338"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">((</span><span class="n">v_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span> <span class="p">(</span><span class="n">i_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-339" name="__codelineno-0-339"></a>    <span class="k">elif</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.2.3&#39;</span><span class="p">,</span> <span class="s1">&#39;.2.3.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-340" name="__codelineno-0-340"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">((</span><span class="n">v_f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">i_f</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-341" name="__codelineno-0-341"></a>    <span class="k">elif</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.3.1&#39;</span><span class="p">,</span> <span class="s1">&#39;.3.1.0&#39;</span><span class="p">,</span> <span class="s1">&#39;.1.3&#39;</span><span class="p">,</span> <span class="s1">&#39;.1.3.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-342" name="__codelineno-0-342"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">((</span><span class="n">v_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">i_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-343" name="__codelineno-0-343"></a>    <span class="k">elif</span> <span class="nb">set</span><span class="p">([</span><span class="n">tipo_falta</span><span class="p">])</span><span class="o">.</span><span class="n">issubset</span><span class="p">({</span><span class="s1">&#39;.1.2.3.0&#39;</span><span class="p">}):</span>
+<a id="__codelineno-0-344" name="__codelineno-0-344"></a>        <span class="n">xf</span> <span class="o">=</span> <span class="p">((</span><span class="n">v_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">v_f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">i_f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">i_f</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">imag</span>
+<a id="__codelineno-0-345" name="__codelineno-0-345"></a>
+<a id="__codelineno-0-346" name="__codelineno-0-346"></a>    <span class="k">return</span> <span class="n">xf</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.id?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
